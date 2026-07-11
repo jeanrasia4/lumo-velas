@@ -238,12 +238,12 @@ function setConn(s,txt){
 async function api(params){
   if(!URL_API)return{error:'sem url'};
   try{
-    const r=await fetch(URL_API,{method:'POST',body:JSON.stringify(params),headers:{'Content-Type':'application/json'}});
-    return await r.json();
-  }catch{
-    try{const r=await fetch(URL_API+'?'+new URLSearchParams(params));return await r.json();}
-    catch(e){return{error:e.message}}
-  }
+    // Envia via GET com payload JSON encodado — evita bloqueio CORS do POST
+    const payload=encodeURIComponent(JSON.stringify(params));
+    const r=await fetch(URL_API+'?payload='+payload,{method:'GET',redirect:'follow'});
+    const txt=await r.text();
+    return JSON.parse(txt);
+  }catch(e){return{error:e.message}}
 }
 
 async function loadAll(){
