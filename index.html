@@ -2,8 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumo Velas Aromáticas — Sistema de Gestão</title>
+<title>Lumo Velas Aromáticas — Sistema de Gestão v3</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -308,6 +311,51 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-sel-all{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;padding:0}
 .calc-sel-all:hover{text-decoration:underline}
 
+
+/* PERSONALIZADOS */
+.pers-body{padding:18px;overflow-y:auto;flex:1}
+.pers-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.pers-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.pers-card-titulo{font-size:14px;font-weight:600}
+.pers-card-cli{font-size:12px;color:var(--text-muted);margin-top:2px}
+.pers-card-custo{font-size:14px;font-weight:700;color:var(--text-accent);white-space:nowrap}
+.pers-card-item{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-secondary)}
+.pers-card-item:last-child{border-bottom:none}
+.pers-card-obs{padding:10px 16px;font-size:12px;color:var(--text-muted);border-top:1px solid var(--border);background:var(--surface-2);font-style:italic}
+/* CALCULADORA */
+.calc-body{padding:18px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px}
+.calc-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.calc-panel-hdr{padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text-secondary);display:flex;align-items:center;justify-content:space-between}
+.calc-panel-hdr span{font-size:12px;font-weight:400;color:var(--text-muted)}
+.receita-sel-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border)}
+.receita-sel-row:last-child{border-bottom:none}
+.receita-sel-row label{flex:1;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.receita-sel-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;flex-shrink:0}
+.receita-sel-qtd{width:72px;padding:6px 8px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:13px;text-align:center;background:var(--surface);color:var(--text-primary)}
+.receita-sel-qtd:focus{outline:none;border-color:var(--gold)}
+.receita-sel-qtd:disabled{opacity:.35;background:var(--surface-2)}
+.btn-calcular{width:100%;padding:12px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-calcular:hover{opacity:.9}
+.calc-result{display:none}
+.calc-result.show{display:block}
+.calc-rec-bloco{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.calc-rec-hdr{padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.calc-rec-nome{font-size:14px;font-weight:600}
+.calc-rec-qtd{font-size:12px;color:var(--text-muted)}
+.calc-rec-item{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px}
+.calc-rec-item:last-child{border-bottom:none}
+.calc-rec-item-nome{color:var(--text-secondary)}
+.calc-rec-item-qtd{font-weight:600}
+.calc-total-bloco{background:var(--bg-accent);border:1px solid var(--border-accent);border-radius:12px;overflow:hidden}
+.calc-total-item{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid var(--border-accent);font-size:13px}
+.calc-total-item:last-child{border-bottom:none}
+.calc-total-item-nome{color:var(--text-secondary);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.calc-total-item-qtd{font-weight:700;color:var(--text-accent);white-space:nowrap;margin-left:12px}
+.calc-total-item-alerta{font-size:11px;color:var(--text-danger);margin-left:6px;white-space:nowrap}
+.calc-empty{text-align:center;padding:20px;font-size:13px;color:var(--text-muted)}
+.calc-sel-all{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;padding:0}
+.calc-sel-all:hover{text-decoration:underline}
+
 /* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--radius);font-size:13px;z-index:300;display:none;align-items:center;gap:8px;white-space:nowrap;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md)}
 .toast.on{display:flex}
@@ -350,6 +398,25 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 const SKEY='lumo_url_v3';
 let URL_API=localStorage.getItem(SKEY)||'';
 let DB={};
+
+// Delegação de eventos para botões gerados dinamicamente
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-action]');
+  if(!btn) return;
+  const action = btn.dataset.action;
+  const cod = btn.dataset.cod;
+  if(action==='edit-pers')   { openFormPers(cod); }
+  if(action==='del-pers')    { delPers(cod); }
+  if(action==='edit-receita'){ openForm('receitas', cod); }
+  if(action==='abrirRelCli') { abrirRelCliente(cod); }
+  if(action==='abrirRelMP')  { abrirRelMP(cod); }
+  if(action==='openEntregas'){ openEntregas(cod); }
+  if(action==='del-rec')     { del(btn.dataset.sheet, cod, btn.dataset.mod); }
+  if(action==='edit-rec')    { openForm(btn.dataset.mod, cod); }
+  if(action==='novo-reg')    { openForm(currentMod, null); }
+  if(action==='voltar')      { goMod(btn.dataset.mod); }
+});
+
 let currentMod='dashboard';
 let editId=null;
 
@@ -416,7 +483,7 @@ function render(){
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">${LABELS[currentMod]}</div>
-      <button class="btn-new" onclick="openForm('${currentMod}',null)"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+      <button class="btn-new" data-action="novo-reg"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
     </div>
     <div class="search-bar"><div class="search-wrap"><i class="ti ti-search"></i>
       <input class="search-input" id="search-input" placeholder="Buscar..." oninput="filterList(this.value)">
@@ -510,9 +577,9 @@ function listMP(){
         <div class="li-sub">${esc(m.Grupo||'—')} · ${esc(m.Unidade||'')} · Estoque: ${Number(m.EstoqueAtual||0).toFixed(2)}</div></div>
       <div class="li-right">
         <span class="badge ${m.AlertaEstoqueBaixo?'alerta':'ok'}">${m.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
-        <button class="bi" onclick="abrirRelMP(${m.Cod})" title="Histórico de compras"><i class="ti ti-history"></i></button>
-        <button class="bi" onclick="openForm('mp',${m.Cod})" title="Editar"><i class="ti ti-edit"></i></button>
-        <button class="bi" onclick="del('MateriaPrima',${m.Cod},'mp')" title="Excluir"><i class="ti ti-trash"></i></button>
+        <button class="bi" data-action="abrirRelMP" data-cod="${m.Cod}" title="Histórico de compras"><i class="ti ti-history"></i></button>
+        <button class="bi" data-action="edit-rec" data-mod="mp" data-cod="${m.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="bi" data-action="del-rec" data-sheet="MateriaPrima" data-mod="mp" data-cod="${m.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div></div>`
   }));
 }
@@ -526,8 +593,8 @@ function listProdutos(){
         <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')} · Estoque: ${p.EstoqueAtual||0}</div></div>
       <div class="li-right">
         <span class="badge ${p.AlertaEstoqueBaixo?'alerta':'ok'}">${p.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
-        <button class="bi" onclick="openForm('produtos',${p.Cod})" title="Editar"><i class="ti ti-edit"></i></button>
-        <button class="bi" onclick="del('Produtos',${p.Cod},'produtos')" title="Excluir"><i class="ti ti-trash"></i></button>
+        <button class="bi" data-action="edit-rec" data-mod="produtos" data-cod="${p.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="bi" data-action="del-rec" data-sheet="Produtos" data-mod="produtos" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div></div>`
   }));
 }
@@ -540,9 +607,9 @@ function listClientes(){
       <div class="li-body"><div class="li-name">${esc(c.Nome)}</div>
         <div class="li-sub">${esc(c.Cidade||'—')} · ${esc(c.Classificacao||'')}${c.Whats?' · '+esc(c.Whats):''}</div></div>
       <div class="li-right">
-        <button class="bi" onclick="abrirRelCliente(${c.Cod})" title="Ver histórico de vendas"><i class="ti ti-history"></i></button>
-        <button class="bi" onclick="openForm('clientes',${c.Cod})" title="Editar"><i class="ti ti-edit"></i></button>
-        <button class="bi" onclick="del('Cliente',${c.Cod},'clientes')" title="Excluir"><i class="ti ti-trash"></i></button>
+        <button class="bi" data-action="abrirRelCli" data-cod="${c.Cod}" title="Ver histórico de vendas"><i class="ti ti-history"></i></button>
+        <button class="bi" data-action="edit-rec" data-mod="clientes" data-cod="${c.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="bi" data-action="del-rec" data-sheet="Cliente" data-mod="clientes" data-cod="${c.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div></div>`
   }));
 }
@@ -555,8 +622,8 @@ function listFornecedores(){
       <div class="li-body"><div class="li-name">${esc(f.Fornecedor)}</div>
         <div class="li-sub">${esc(f.Cidade||'—')}${f.Email?' · '+esc(f.Email):''}${f.CNPJ?' · '+esc(f.CNPJ):''}</div></div>
       <div class="li-right">
-        <button class="bi" onclick="openForm('fornecedores',${f.Cod})" title="Editar"><i class="ti ti-edit"></i></button>
-        <button class="bi" onclick="del('Fornecedor',${f.Cod},'fornecedores')" title="Excluir"><i class="ti ti-trash"></i></button>
+        <button class="bi" data-action="edit-rec" data-mod="fornecedores" data-cod="${f.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="bi" data-action="del-rec" data-sheet="Fornecedor" data-mod="fornecedores" data-cod="${f.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div></div>`
   }));
 }
@@ -575,7 +642,7 @@ function listCompras(){
           <div class="li-sub">NF ${esc(c.NF||'—')} · ${fmtD(c.DataEntrada)} · ${myIt.length} item(ns) · ${fmt$(total)}</div></div>
         <div class="li-right">
           <span class="badge ${c.StatusPagamento==='Pago'?'pago':'pendente'}">${c.StatusPagamento||'Pendente'}</span>
-          <button class="bi" onclick="del('Compras',${c.Cod},'compras')" title="Excluir"><i class="ti ti-trash"></i></button>
+          <button class="bi" data-action="del-rec" data-sheet="Compras" data-mod="compras" data-cod="${c.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
         </div></div>`
     };
   });
@@ -600,8 +667,8 @@ function listVendas(){
           <span class="badge ${v.StatusPagamento==='Pago'?'pago':'pendente'}">${v.StatusPagamento||'Pendente'}</span>
           <span class="badge ${eS}">${eL}</span>
         </div>
-        <button class="bi" onclick="openEntregas(${v.Cod})" title="Entregas"><i class="ti ti-package"></i></button>
-        <button class="bi" onclick="del('Vendas',${v.Cod},'vendas')" title="Excluir"><i class="ti ti-trash"></i></button>
+        <button class="bi" data-action="openEntregas" data-cod="${v.Cod}" title="Entregas"><i class="ti ti-package"></i></button>
+        <button class="bi" data-action="del-rec" data-sheet="Vendas" data-mod="vendas" data-cod="${v.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div>`
     };
   });
@@ -618,7 +685,7 @@ function listProducao(){
         <div class="li-body"><div class="li-name">${esc(prod?prod.Produto:'Produto '+p.CodProduto)}</div>
           <div class="li-sub">${p.Quantidade} un · ${fmtD(p.DataProducao)} · Custo: ${fmt$(p.CustoCalculado)}</div></div>
         <div class="li-right">
-          <button class="bi" onclick="del('Producao',${p.Cod},'producao')" title="Excluir"><i class="ti ti-trash"></i></button>
+          <button class="bi" data-action="del-rec" data-sheet="Producao" data-mod="producao" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
         </div></div>`
     };
   });
@@ -644,7 +711,7 @@ function renderReceitas(){
         <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="rc-custo">${fmt$(custo)}/un</span>
-          <button class="bi" onclick="openForm('receitas','${cp}')" title="Editar"><i class="ti ti-edit"></i></button>
+          <button class="bi" data-action="edit-receita" data-cod="${cp}" title="Editar"><i class="ti ti-edit"></i></button>
         </div>
       </div>${itensHTML}</div>`;
   }).join('')+'</div>';
@@ -676,7 +743,7 @@ function openForm(mod,id){
 
 function frmHdr(mod,label){
   return`<div class="mod-header">
-    <button class="btn-back" onclick="goMod('${mod}')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+    <button class="btn-back" data-action="voltar" data-mod="${mod}"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
     <div class="mod-title">${label}</div>
   </div>`;
 }
@@ -1134,6 +1201,322 @@ async function toggleEntrega(codVenda,codProduto,checked){
   if(r.error){toast('Erro ao atualizar','e');return;}
   toast('Entrega atualizada');await loadAll();
   document.getElementById('list-body').innerHTML=renderListItems('vendas','');
+}
+
+
+// ===== PERSONALIZADOS =====
+function renderPersonalizados(c){
+  const pers=DB.Personalizados||[];
+  const cli=DB.Cliente||[];
+  const mp=DB.MateriaPrima||[];
+  const ci=DB.ComprasItens||[];
+  const comp=DB.Compras||[];
+
+  function lastPrice(codInsumo){
+    const found=(ci||[]).filter(i=>String(i.CodInsumo)===String(codInsumo));
+    if(!found.length)return 0;
+    return found.map(i=>{const c2=comp.find(x=>String(x.Cod)===String(i.CodCompra));return{v:Number(i.ValorUnitario||0),d:c2?c2.DataEntrada:''};})
+      .sort((a,b)=>b.d.localeCompare(a.d))[0].v;
+  }
+
+  const cardsHTML=pers.length===0
+    ?`<div class="empty-list"><i class="ti ti-star" style="font-size:36px;opacity:.2"></i><p>Nenhum produto personalizado cadastrado.</p></div>`
+    :pers.map(p=>{
+        const cliente=cli.find(x=>String(x.Cod)===String(p.CodCliente));
+        const itens=(DB.PersonalizadosItens||[]).filter(i=>String(i.CodPersonalizado)===String(p.Cod));
+        let custo=0;
+        const itensHTML=itens.map(i=>{
+          const ins=mp.find(m=>String(m.Cod)===String(i.CodInsumo));
+          const preco=lastPrice(i.CodInsumo);
+          const sub=Number(i.Quantidade||0)*preco;
+          custo+=sub;
+          return`<div class="pers-card-item">
+            <span>${esc(ins?ins.Item:'Insumo '+i.CodInsumo)} — ${i.Quantidade} ${esc(i.Unidade||ins&&ins.Unidade||'')}</span>
+            <span>${fmt$(sub)}</span>
+          </div>`;
+        }).join('');
+        return`<div class="pers-card">
+          <div class="pers-card-hdr">
+            <div>
+              <div class="pers-card-titulo">${esc(p.Nome)}</div>
+              <div class="pers-card-cli"><i class="ti ti-user" style="font-size:12px"></i> ${esc(cliente?cliente.Nome:'Cliente '+p.CodCliente)}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="text-align:right">
+                <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em">Custo/un</div>
+                <div class="pers-card-custo">${fmt$(custo)}</div>
+              </div>
+              <button class="bi" data-action="edit-pers" data-cod="${p.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
+              <button class="bi" data-action="del-pers" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
+            </div>
+          </div>
+          ${itensHTML||'<div class="pers-card-item" style="color:var(--text-muted)">Sem insumos cadastrados.</div>'}
+          ${p.Observacao?`<div class="pers-card-obs">${esc(p.Observacao)}</div>`:''}
+        </div>`;
+      }).join('');
+
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <div class="mod-title">Personalizados</div>
+      <button class="btn-new" onclick="openFormPers(null)"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+    </div>
+    <div class="search-bar"><div class="search-wrap"><i class="ti ti-search"></i>
+      <input class="search-input" placeholder="Buscar..." oninput="filtrarPers(this.value)">
+    </div></div>
+    <div class="pers-body" id="pers-body">${cardsHTML}</div>
+  </div>`;
+}
+
+function filtrarPers(q){
+  q=q.toLowerCase().trim();
+  const body=document.getElementById('pers-body');if(!body)return;
+  const pers=(DB.Personalizados||[]).filter(p=>(p.Nome+' '+(p.Observacao||'')+' '+(p.CodCliente||'')).toLowerCase().includes(q));
+  const bak=DB.Personalizados;DB.Personalizados=pers;
+  const frag=document.createElement('div');
+  renderPersonalizados(frag);
+  body.innerHTML=frag.querySelector('#pers-body')?frag.querySelector('#pers-body').innerHTML:body.innerHTML;
+  DB.Personalizados=bak;
+}
+
+let persEditId=null;
+function openFormPers(id){
+  persEditId=id?String(id):null;
+  const c=document.getElementById('main-content');
+  const p=id?(DB.Personalizados||[]).find(x=>String(x.Cod)===String(id)):null;
+  const cliOpts=(DB.Cliente||[]).map(x=>`<option value="${x.Cod}" ${p&&String(p.CodCliente)===String(x.Cod)?'selected':''}>${esc(x.Nome)}</option>`).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" onclick="goMod('personalizados')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">${id?'Editar personalizado':'Novo personalizado'}</div>
+    </div>
+    <div class="form-view"><div class="form-scroll">
+      <div class="fsec">Identificação</div>
+      <div class="fg"><label class="fl">Nome do produto *</label>
+        <input class="fi" id="pf-nome" value="${esc(p?p.Nome:'')}" placeholder="ex: Vela Lavanda + Eucalipto da Maria">
+      </div>
+      <div class="fg"><label class="fl">Cliente *</label>
+        <select class="fi" id="pf-cli"><option value="">Selecione...</option>${cliOpts}</select>
+      </div>
+      <div class="fg"><label class="fl">Observação</label>
+        <input class="fi" id="pf-obs" value="${esc(p?p.Observacao||'':'')}" placeholder="Notas sobre a fórmula, preferências...">
+      </div>
+      <div class="fsec">Insumos da receita</div>
+      <div class="itens-box">
+        <div class="itens-box-hdr"><span>Insumos</span><span class="total" id="pf-custo">Custo: R$ 0,00</span></div>
+        <div id="pf-itens"></div>
+        <button class="btn-add-row" onclick="addItemPers()"><i class="ti ti-plus" style="font-size:13px"></i> Adicionar insumo</button>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="goMod('personalizados')">Cancelar</button>
+      <button class="btn-save" onclick="savePers()"><i class="ti ti-check" style="font-size:14px"></i>Salvar</button>
+    </div></div>
+  </div>`;
+  if(id){
+    const itens=(DB.PersonalizadosItens||[]).filter(i=>String(i.CodPersonalizado)===String(id));
+    itens.forEach(i=>{
+      addItemPers();
+      const rows=document.querySelectorAll('#pf-itens .item-dyn');
+      const last=rows[rows.length-1];
+      last.querySelector('.pfi-ins').value=i.CodInsumo;
+      last.querySelector('.pfi-qtd').value=i.Quantidade;
+      last.querySelector('.pfi-un').value=i.Unidade||'';
+    });
+    calcCustoPers();
+  }
+}
+
+function mpOptsPers(){
+  return(DB.MateriaPrima||[]).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (${esc(m.Unidade||'')})</option>`).join('');
+}
+
+function addItemPers(){
+  const l=document.getElementById('pf-itens');if(!l)return;
+  const d=document.createElement('div');d.className='item-dyn';
+  d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
+    <select class="fi pfi-ins" onchange="calcCustoPers()"><option value="">Selecione...</option>${mpOptsPers()}</select></div>
+  <div class="item-vals">
+    <div><label class="fl">Quantidade</label><input class="fi pfi-qtd" type="number" min="0" step="0.001" oninput="calcCustoPers()"></div>
+    <div><label class="fl">Unidade</label><input class="fi pfi-un" placeholder="kg, g, mL..."></div>
+    <button class="btn-rem" onclick="this.closest('.item-dyn').remove();calcCustoPers()" style="margin-bottom:3px"><i class="ti ti-trash" style="font-size:16px"></i></button>
+  </div>`;
+  l.appendChild(d);
+}
+
+function calcCustoPers(){
+  const ci=DB.ComprasItens||[];const comp=DB.Compras||[];
+  function lp(cod){
+    const found=ci.filter(i=>String(i.CodInsumo)===String(cod));
+    if(!found.length)return 0;
+    return found.map(i=>{const c2=comp.find(x=>String(x.Cod)===String(i.CodCompra));return{v:Number(i.ValorUnitario||0),d:c2?c2.DataEntrada:''};})
+      .sort((a,b)=>b.d.localeCompare(a.d))[0].v;
+  }
+  let custo=0;
+  document.querySelectorAll('#pf-itens .item-dyn').forEach(r=>{
+    const cod=r.querySelector('.pfi-ins').value;
+    const qtd=Number(r.querySelector('.pfi-qtd').value||0);
+    if(cod)custo+=qtd*lp(cod);
+  });
+  const el=document.getElementById('pf-custo');
+  if(el)el.textContent='Custo: '+fmt$(custo);
+}
+
+async function savePers(){
+  const nome=document.getElementById('pf-nome').value.trim();
+  const cli=document.getElementById('pf-cli').value;
+  if(!nome||!cli){toast('Informe nome e cliente','e');return;}
+  const rows=document.querySelectorAll('#pf-itens .item-dyn');
+  if(!rows.length){toast('Adicione pelo menos 1 insumo','e');return;}
+  const itens=[];let ok=true;
+  rows.forEach(r=>{
+    const cod=r.querySelector('.pfi-ins').value;
+    const qtd=Number(r.querySelector('.pfi-qtd').value||0);
+    const un=r.querySelector('.pfi-un').value;
+    if(!cod||!qtd)ok=false;
+    itens.push({CodInsumo:cod,Quantidade:qtd,Unidade:un});
+  });
+  if(!ok){toast('Preencha todos os insumos','e');return;}
+  const data={Nome:nome,CodCliente:cli,Observacao:document.getElementById('pf-obs').value};
+  const r=persEditId
+    ?await api({action:'updatePersonalizado',data:{...data,Cod:persEditId,itens}})
+    :await api({action:'createPersonalizado',data:{...data,itens}});
+  if(r.error){toast('Erro: '+r.error,'e');return;}
+  toast(persEditId?'Personalizado atualizado!':'Personalizado salvo!');
+  await loadAll();goMod('personalizados');
+}
+
+async function delPers(cod){
+  if(!confirm('Excluir este personalizado?'))return;
+  const r=await api({action:'deletePersonalizado',cod:String(cod)});
+  if(r.error){toast('Erro: '+r.error,'e');return;}
+  toast('Excluído');await loadAll();goMod('personalizados');
+}
+
+// ===== CALCULADORA DE LOTE =====
+function renderCalculadora(c){
+  const eng=DB.EngenhariaProduto||[];
+  const prods=DB.Produtos||[];
+  const prodComReceita=prods.filter(p=>eng.some(e=>String(e.CodProduto)===String(p.Cod)));
+  const linhasHTML=prodComReceita.length===0
+    ?'<div class="calc-empty">Nenhum produto com receita cadastrada.</div>'
+    :prodComReceita.map(p=>`
+        <div class="receita-sel-row">
+          <label>
+            <input type="checkbox" id="calc-chk-${p.Cod}" onchange="toggleCalcRow(${p.Cod})">
+            ${esc(p.Produto)}
+            ${p.Grupo?`<span style="font-size:11px;color:var(--text-muted)">${esc(p.Grupo)}</span>`:''}
+          </label>
+          <input type="number" class="receita-sel-qtd" id="calc-qtd-${p.Cod}" value="1" min="1" disabled>
+        </div>`).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header"><div class="mod-title">Calculadora de Lote</div></div>
+    <div class="calc-body">
+      <div class="calc-panel">
+        <div class="calc-panel-hdr">
+          Selecione os produtos e quantidades
+          <span>
+            <button class="calc-sel-all" onclick="selecionarTodosCalc(true)">Selecionar todos</button>
+            &nbsp;·&nbsp;
+            <button class="calc-sel-all" onclick="selecionarTodosCalc(false)">Limpar</button>
+          </span>
+        </div>
+        ${linhasHTML}
+      </div>
+      <button class="btn-calcular" onclick="calcularLote()">
+        <i class="ti ti-calculator"></i>Calcular necessidade de insumos
+      </button>
+      <div class="calc-result" id="calc-result"></div>
+    </div>
+  </div>`;
+}
+
+function toggleCalcRow(codProd){
+  const chk=document.getElementById('calc-chk-'+codProd);
+  const qtd=document.getElementById('calc-qtd-'+codProd);
+  if(qtd)qtd.disabled=!chk.checked;
+  if(chk.checked&&qtd)qtd.focus();
+}
+
+function selecionarTodosCalc(sel){
+  (DB.Produtos||[]).filter(p=>(DB.EngenhariaProduto||[]).some(e=>String(e.CodProduto)===String(p.Cod))).forEach(p=>{
+    const chk=document.getElementById('calc-chk-'+p.Cod);
+    const qtd=document.getElementById('calc-qtd-'+p.Cod);
+    if(chk){chk.checked=sel;if(qtd)qtd.disabled=!sel;}
+  });
+}
+
+function fmtQtd(v){
+  const n=Number(v||0);
+  return Number.isInteger(n)?n.toString():parseFloat(n.toFixed(4)).toString();
+}
+
+function calcularLote(){
+  const eng=DB.EngenhariaProduto||[];
+  const prods=DB.Produtos||[];
+  const mp=DB.MateriaPrima||[];
+
+  const selecionados=prods.filter(p=>{
+    const chk=document.getElementById('calc-chk-'+p.Cod);
+    return chk&&chk.checked;
+  }).map(p=>({prod:p,qtd:Number(document.getElementById('calc-qtd-'+p.Cod).value||1)}));
+
+  if(!selecionados.length){toast('Selecione pelo menos um produto','e');return;}
+
+  const result=document.getElementById('calc-result');
+  result.className='calc-result show';
+  const totalInsumos={};
+
+  const blocosHTML=selecionados.map(({prod,qtd})=>{
+    const receita=eng.filter(e=>String(e.CodProduto)===String(prod.Cod));
+    if(!receita.length)return`<div class="calc-rec-bloco">
+      <div class="calc-rec-hdr"><span class="calc-rec-nome">${esc(prod.Produto)}</span><span class="calc-rec-qtd">${qtd} un</span></div>
+      <div style="padding:12px 16px;font-size:13px;color:var(--text-muted)">Sem receita cadastrada.</div>
+    </div>`;
+
+    const itensHTML=receita.map(e=>{
+      const ins=mp.find(m=>String(m.Cod)===String(e.CodInsumo));
+      const qtdNec=Number(e.Quantidade||0)*qtd;
+      const nome=ins?ins.Item:'Insumo '+e.CodInsumo;
+      const uni=e.Unidade||(ins?ins.Unidade:'')||'';
+      const k=String(e.CodInsumo);
+      if(!totalInsumos[k])totalInsumos[k]={nome,unidade:uni,qtdTotal:0,estoqueAtual:Number(ins?ins.EstoqueAtual||0:0)};
+      totalInsumos[k].qtdTotal+=qtdNec;
+      return`<div class="calc-rec-item">
+        <span class="calc-rec-item-nome">${esc(nome)}</span>
+        <span class="calc-rec-item-qtd">${fmtQtd(qtdNec)} ${esc(uni)}</span>
+      </div>`;
+    }).join('');
+
+    return`<div class="calc-rec-bloco">
+      <div class="calc-rec-hdr">
+        <span class="calc-rec-nome">${esc(prod.Produto)}</span>
+        <span class="calc-rec-qtd">${qtd} unidade${qtd!==1?'s':''}</span>
+      </div>${itensHTML}
+    </div>`;
+  }).join('');
+
+  const totalHTML=Object.entries(totalInsumos)
+    .sort((a,b)=>a[1].nome.localeCompare(b[1].nome))
+    .map(([k,v])=>{
+      const falta=v.qtdTotal-v.estoqueAtual;
+      const alertaHTML=falta>0?`<span class="calc-total-item-alerta">⚠ falta ${fmtQtd(falta)} ${esc(v.unidade)}</span>`:'';
+      return`<div class="calc-total-item">
+        <span class="calc-total-item-nome">${esc(v.nome)}</span>
+        <div style="display:flex;align-items:center">${alertaHTML}
+          <span class="calc-total-item-qtd">${fmtQtd(v.qtdTotal)} ${esc(v.unidade)}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+  const totalVelas=selecionados.reduce((s,x)=>s+x.qtd,0);
+  result.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="fin-sec" style="margin:0">Por receita</div>
+      <span style="font-size:12px;color:var(--text-muted)">${selecionados.length} tipo(s) · ${totalVelas} vela(s)</span>
+    </div>
+    ${blocosHTML}
+    <div class="fin-sec" style="margin-top:20px;margin-bottom:12px">Resumo total de insumos</div>
+    <div class="calc-total-bloco">${totalHTML||'<div class="calc-empty">Sem insumos.</div>'}</div>`;
 }
 
 // Init
