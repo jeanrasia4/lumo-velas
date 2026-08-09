@@ -37,8 +37,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* NAV */
-.nav{display:flex;gap:1px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface-2);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.nav::-webkit-scrollbar{display:none}
+.nav{display:flex;flex-direction:column;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.nav-row{display:flex;align-items:center;gap:2px;padding:4px 10px;border-bottom:0.5px solid var(--border)}
+.nav-row:last-child{border-bottom:none}
+.nav-group-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;padding:0 6px;white-space:nowrap;flex-shrink:0;min-width:80px}
+@media(max-width:600px){
+  .nav{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav::-webkit-scrollbar{display:none}
+  .nav-row{flex-wrap:nowrap}
+  .nav-group-label{display:none}
+}
 .nb{padding:7px 13px;border-radius:var(--radius);border:none;background:transparent;font-size:13px;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .15s;flex-shrink:0}
 .nb:hover{background:var(--surface-3);color:var(--text-primary)}
 .nb.on{background:var(--bg-accent);color:var(--text-accent);font-weight:500}
@@ -77,7 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dai-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
 
 /* MODULE HEADER */
-.mod-header{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);position:sticky;top:65px;z-index:9}
+.mod-header{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);position:sticky;top:0;z-index:9}
 .mod-title{font-size:16px;font-weight:600;flex:1}
 .btn-back{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:6px;display:flex;align-items:center;border-radius:var(--radius)}
 .btn-back:hover{color:var(--text-primary);background:var(--surface-2)}
@@ -356,6 +364,12 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-sel-all{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;padding:0}
 .calc-sel-all:hover{text-decoration:underline}
 
+
+/* CUSTOS EXTRAS */
+.ce-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-3);color:var(--text-secondary);margin-left:4px}
+.rc-footer{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg-accent);border-top:1px solid var(--border-accent);font-size:13px;font-weight:600}
+.rc-footer-custo{color:var(--text-accent);font-size:15px}
+
 /* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--radius);font-size:13px;z-index:300;display:none;align-items:center;gap:8px;white-space:nowrap;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md)}
 .toast.on{display:flex}
@@ -376,18 +390,33 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
   <div class="alerts" id="alerts-bar"></div>
 
   <div class="nav" id="nav">
-    <button class="nb on" onclick="goMod('dashboard')" data-mod="dashboard"><i class="ti ti-layout-dashboard"></i>Início</button>
-    <button class="nb" onclick="goMod('mp')" data-mod="mp"><i class="ti ti-flask"></i>Insumos</button>
-    <button class="nb" onclick="goMod('produtos')" data-mod="produtos"><i class="ti ti-candle"></i>Produtos</button>
-    <button class="nb" onclick="goMod('clientes')" data-mod="clientes"><i class="ti ti-users"></i>Clientes</button>
-    <button class="nb" onclick="goMod('fornecedores')" data-mod="fornecedores"><i class="ti ti-truck"></i>Fornecedores</button>
-    <button class="nb" onclick="goMod('compras')" data-mod="compras"><i class="ti ti-shopping-cart"></i>Compras</button>
-    <button class="nb" onclick="goMod('vendas')" data-mod="vendas"><i class="ti ti-receipt"></i>Vendas</button>
-    <button class="nb" onclick="goMod('receitas')" data-mod="receitas"><i class="ti ti-tools"></i>Receitas</button>
-    <button class="nb" onclick="goMod('producao')" data-mod="producao"><i class="ti ti-hammer"></i>Produção</button>
-    <button class="nb" onclick="goMod('financeiro')" data-mod="financeiro"><i class="ti ti-chart-bar"></i>Financeiro</button>
-    <button class="nb" onclick="goMod('personalizados')" data-mod="personalizados"><i class="ti ti-star"></i>Personalizados</button>
-    <button class="nb" onclick="goMod('calculadora')" data-mod="calculadora"><i class="ti ti-calculator"></i>Calculadora</button>
+    <!-- Linha 0: Dashboard sozinho -->
+    <div class="nav-row">
+      <button class="nb on" onclick="goMod('dashboard')" data-mod="dashboard"><i class="ti ti-layout-dashboard"></i>Início</button>
+    </div>
+    <!-- Linha 1: Cadastros -->
+    <div class="nav-row">
+      <span class="nav-group-label">Cadastros</span>
+      <button class="nb" onclick="goMod('mp')" data-mod="mp"><i class="ti ti-flask"></i>Insumos</button>
+      <button class="nb" onclick="goMod('produtos')" data-mod="produtos"><i class="ti ti-candle"></i>Produtos</button>
+      <button class="nb" onclick="goMod('clientes')" data-mod="clientes"><i class="ti ti-users"></i>Clientes</button>
+      <button class="nb" onclick="goMod('fornecedores')" data-mod="fornecedores"><i class="ti ti-truck"></i>Fornecedores</button>
+    </div>
+    <!-- Linha 2: Movimentação -->
+    <div class="nav-row">
+      <span class="nav-group-label">Movimentação</span>
+      <button class="nb" onclick="goMod('compras')" data-mod="compras"><i class="ti ti-shopping-cart"></i>Compras</button>
+      <button class="nb" onclick="goMod('vendas')" data-mod="vendas"><i class="ti ti-receipt"></i>Vendas</button>
+      <button class="nb" onclick="goMod('financeiro')" data-mod="financeiro"><i class="ti ti-chart-bar"></i>Financeiro</button>
+    </div>
+    <!-- Linha 3: Produção -->
+    <div class="nav-row">
+      <span class="nav-group-label">Produção</span>
+      <button class="nb" onclick="goMod('receitas')" data-mod="receitas"><i class="ti ti-tools"></i>Receitas</button>
+      <button class="nb" onclick="goMod('producao')" data-mod="producao"><i class="ti ti-hammer"></i>Produção</button>
+      <button class="nb" onclick="goMod('personalizados')" data-mod="personalizados"><i class="ti ti-star"></i>Personalizados</button>
+      <button class="nb" onclick="goMod('calculadora')" data-mod="calculadora"><i class="ti ti-calculator"></i>Calculadora</button>
+    </div>
   </div>
 
   <div id="main-content"></div>
@@ -415,6 +444,12 @@ document.addEventListener('click', function(e){
   if(action==='edit-rec')    { openForm(btn.dataset.mod, cod); }
   if(action==='novo-reg')    { openForm(currentMod, null); }
   if(action==='voltar')      { goMod(btn.dataset.mod); }
+  if(action==='abrirRelCli') { abrirRelCliente(cod); }
+  if(action==='abrirRelMP')  { abrirRelMP(cod); }
+  if(action==='detalhe-compra'){ abrirDetalheCompra(cod); }
+  if(action==='edit-ce'){ editCustoExtra(Number(btn.dataset.idx)); }
+  if(action==='del-ce'){ delCustoExtra(Number(btn.dataset.idx)); }
+  if(action==='save-ce'){ const i=Number(btn.dataset.idx); saveCustoExtra(i===-1?null:i); }
 });
 
 let currentMod='dashboard';
@@ -636,7 +671,7 @@ function listCompras(){
     const total=myIt.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
     return{
       s:((f?f.Fornecedor:'')+c.NF+c.DataEntrada).toLowerCase(),
-      h:`<div class="list-item">
+      h:`<div class="list-item" style="cursor:pointer" data-action="detalhe-compra" data-cod="${c.Cod}">
         <div class="li-av p i"><i class="ti ti-shopping-cart"></i></div>
         <div class="li-body"><div class="li-name">${esc(f?f.Fornecedor:'Fornecedor '+c.Fornecedor)}</div>
           <div class="li-sub">NF ${esc(c.NF||'—')} · ${fmtD(c.DataEntrada)} · ${myIt.length} item(ns) · ${fmt$(total)}</div></div>
@@ -710,7 +745,7 @@ function renderReceitas(){
       <div class="rc-header">
         <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
         <div style="display:flex;align-items:center;gap:8px">
-          <span class="rc-custo">${fmt$(custo)}/un</span>
+          <span class="rc-custo" title="Inclui custos extras">${fmt$(calcCustoComExtras(custo))}/un${custosExtras.length>0?'<span class="ce-badge">+extras</span>':''}</span>
           <button class="bi" data-action="edit-receita" data-cod="${cp}" title="Editar"><i class="ti ti-edit"></i></button>
         </div>
       </div>${itensHTML}</div>`;
@@ -1267,6 +1302,141 @@ function renderPersonalizados(c){
   </div>`;
 }
 
+
+function filtrarCalc(){
+  const q=(document.getElementById('calc-busca')?.value||'').toLowerCase();
+  const gr=(document.getElementById('calc-grupo')?.value||'').toLowerCase();
+  const prods=DB.Produtos||[];
+  const eng=DB.EngenhariaProduto||[];
+  const lista=document.getElementById('calc-lista');
+  if(!lista)return;
+  const prodFilt=prods.filter(p=>{
+    if(!eng.some(e=>String(e.CodProduto)===String(p.Cod)))return false;
+    if(q&&!p.Produto.toLowerCase().includes(q))return false;
+    if(gr&&(!p.Grupo||!p.Grupo.toLowerCase().includes(gr)))return false;
+    return true;
+  });
+  lista.innerHTML=prodFilt.length===0
+    ?'<div class="calc-empty">Nenhum produto encontrado.</div>'
+    :prodFilt.map(p=>`<div class="receita-sel-row">
+        <label><input type="checkbox" id="calc-chk-${p.Cod}" onchange="toggleCalcRow(${p.Cod})">
+          ${esc(p.Produto)}<span style="font-size:11px;color:var(--text-muted)">${esc(p.Grupo||'')}</span></label>
+        <input type="number" class="receita-sel-qtd" id="calc-qtd-${p.Cod}" value="1" min="1" disabled>
+      </div>`).join('');
+}
+
+
+// ===== CUSTOS EXTRAS =====
+// Armazenados localmente (sem nova aba no Sheets por ora)
+// Estrutura: [{id, nome, tipo:'fixo'|'percentual', valor}]
+let custosExtras = JSON.parse(localStorage.getItem('lumo_custos_extras')||'[]');
+
+function salvarCustosExtras(){
+  localStorage.setItem('lumo_custos_extras', JSON.stringify(custosExtras));
+}
+
+function renderCustosExtras(c){
+  const rows = custosExtras.map((ce,i)=>`
+    <div class="list-item">
+      <div class="li-av" style="background:var(--surface-3);color:var(--text-secondary);font-size:12px">${ce.tipo==='percentual'?'%':'R$'}</div>
+      <div class="li-body"><div class="li-name">${esc(ce.nome)}</div>
+        <div class="li-sub">${ce.tipo==='percentual'?ce.valor+'% sobre o custo':'R$ '+Number(ce.valor).toFixed(2)+' fixo por unidade'}</div>
+      </div>
+      <div class="li-right">
+        <button class="bi" data-action="edit-ce" data-idx="${i}" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="bi" data-action="del-ce" data-idx="${i}" title="Excluir"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" onclick="goMod('receitas')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">Custos Extras</div>
+      <button class="btn-new" onclick="abrirFormCustoExtra(null)"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-warning);border-bottom:1px solid var(--border-warning);font-size:12px;color:var(--text-warning)">
+      <i class="ti ti-info-circle"></i> Estes custos são somados automaticamente ao custo de todas as receitas (frete, luz, mão de obra, % de lucro, etc).
+    </div>
+    <div class="list-body">
+      ${rows||'<div class="empty-list"><i class="ti ti-receipt" style="font-size:32px;opacity:.2"></i><p>Nenhum custo extra cadastrado.</p></div>'}
+    </div>
+  </div>`;
+}
+
+function abrirFormCustoExtra(idx){
+  const ce = idx!==null ? custosExtras[idx] : null;
+  const c=document.getElementById('main-content');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" onclick="renderCustosExtras(document.getElementById('main-content'))"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">${ce?'Editar custo extra':'Novo custo extra'}</div>
+    </div>
+    <div class="form-view"><div class="form-scroll">
+      <div class="fsec">Identificação</div>
+      <div class="fg"><label class="fl">Nome do custo *</label>
+        <input class="fi" id="ce-nome" value="${esc(ce?ce.nome:'')}" placeholder="ex: Frete, Mão de obra, % Lucro...">
+      </div>
+      <div class="fsec">Tipo e valor</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Tipo</label>
+          <select class="fi" id="ce-tipo" onchange="toggleCETipo()">
+            <option value="fixo" ${!ce||ce.tipo==='fixo'?'selected':''}>Valor fixo por unidade (R$)</option>
+            <option value="percentual" ${ce&&ce.tipo==='percentual'?'selected':''}>Percentual sobre o custo (%)</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl" id="ce-val-label">Valor (R$ por unidade)</label>
+          <input class="fi" id="ce-valor" type="number" min="0" step="0.01" value="${ce?ce.valor:''}" placeholder="0">
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="renderCustosExtras(document.getElementById('main-content'))">Cancelar</button>
+      <button class="btn-save" data-action="save-ce" data-idx="${idx!==null?idx:-1}"><i class="ti ti-check" style="font-size:14px"></i>Salvar</button>
+    </div></div>
+  </div>`;
+  toggleCETipo();
+}
+
+function toggleCETipo(){
+  const tipo=document.getElementById('ce-tipo')?.value;
+  const lbl=document.getElementById('ce-val-label');
+  if(lbl)lbl.textContent=tipo==='percentual'?'Percentual (%)':'Valor (R$ por unidade)';
+}
+
+function saveCustoExtra(idx){
+  const nome=document.getElementById('ce-nome').value.trim();
+  const tipo=document.getElementById('ce-tipo').value;
+  const valor=Number(document.getElementById('ce-valor').value||0);
+  if(!nome||!valor){toast('Preencha nome e valor','e');return;}
+  const ce={nome,tipo,valor};
+  if(idx!==null&&idx!==undefined&&!isNaN(idx)){
+    custosExtras[idx]=ce;
+  } else {
+    custosExtras.push(ce);
+  }
+  salvarCustosExtras();
+  toast('Custo extra salvo!');
+  renderCustosExtras(document.getElementById('main-content'));
+}
+
+function editCustoExtra(idx){ abrirFormCustoExtra(idx); }
+function delCustoExtra(idx){
+  if(!confirm('Excluir este custo extra?'))return;
+  custosExtras.splice(idx,1);
+  salvarCustosExtras();
+  toast('Excluído');
+  renderCustosExtras(document.getElementById('main-content'));
+}
+
+function calcCustoComExtras(custoBase){
+  let total=custoBase;
+  custosExtras.forEach(ce=>{
+    if(ce.tipo==='fixo') total+=Number(ce.valor);
+    else if(ce.tipo==='percentual') total+=custoBase*(Number(ce.valor)/100);
+  });
+  return total;
+}
+
 function filtrarPers(q){
   q=q.toLowerCase().trim();
   const body=document.getElementById('pers-body');if(!body)return;
@@ -1420,7 +1590,16 @@ function renderCalculadora(c){
             <button class="calc-sel-all" onclick="selecionarTodosCalc(false)">Limpar</button>
           </span>
         </div>
-        ${linhasHTML}
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <div class="search-wrap" style="flex:1;min-width:160px"><i class="ti ti-search"></i>
+            <input class="search-input" id="calc-busca" placeholder="Buscar produto..." oninput="filtrarCalc()">
+          </div>
+          <select class="fi" id="calc-grupo" style="width:auto;padding:8px 28px 8px 10px;font-size:13px" onchange="filtrarCalc()">
+            <option value="">Todos os grupos</option>
+            ${[...new Set(prodComReceita.map(p=>p.Grupo).filter(Boolean))].sort().map(g=>`<option>${esc(g)}</option>`).join('')}
+          </select>
+        </div>
+        <div id="calc-lista">${linhasHTML}</div>
       </div>
       <button class="btn-calcular" onclick="calcularLote()">
         <i class="ti ti-calculator"></i>Calcular necessidade de insumos
@@ -1520,6 +1699,303 @@ function calcularLote(){
 }
 
 // Init
+
+// ===== RELATÓRIO DO CLIENTE =====
+let relCliId=null;
+function abrirRelCliente(cod){
+  relCliId=String(cod);
+  currentMod='relcli';
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  renderRelCliente(document.getElementById('main-content'));
+}
+function renderRelCliente(c){
+  const cli=(DB.Cliente||[]).find(x=>String(x.Cod)===String(relCliId));
+  if(!cli){c.innerHTML='<div class="empty-list"><p>Cliente não encontrado.</p></div>';return;}
+  const vendas=(DB.Vendas||[]).filter(v=>String(v.CodCliente)===String(relCliId));
+  const itens=DB.VendasItens||[];const prods=DB.Produtos||[];
+  let totalGeral=0,totalPago=0,totalPend=0;
+  const vendasHTML=vendas.length===0
+    ?'<p style="font-size:13px;color:var(--text-muted);padding:12px 0">Nenhuma venda registrada.</p>'
+    :vendas.map(v=>{
+      const myIt=itens.filter(i=>String(i.CodVenda)===String(v.Cod));
+      const tot=myIt.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
+      const ent=myIt.filter(i=>i.Entregue==='Sim').length;
+      const eS=ent===myIt.length&&myIt.length>0?'ok':ent>0?'parcial':'pendente';
+      const eL=ent===myIt.length&&myIt.length>0?'Entregue':ent>0?'Parcial':'Pendente';
+      totalGeral+=tot;
+      if(v.StatusPagamento==='Pago')totalPago+=tot; else totalPend+=tot;
+      const itensHTML=myIt.map(i=>{
+        const p=prods.find(x=>String(x.Cod)===String(i.CodProduto));
+        const entTag=i.Entregue==='Sim'
+          ?'<span class="badge ok" style="font-size:10px">Entregue</span>'
+          :'<span class="badge pendente" style="font-size:10px">Pendente</span>';
+        return`<div class="venda-card-item"><span class="venda-card-item-nome">${esc(p?p.Produto:'Produto '+i.CodProduto)} × ${i.Quantidade}</span>
+          <div style="display:flex;align-items:center;gap:8px">${entTag}<span class="venda-card-item-val">${fmt$(i.ValorTotal)}</span></div></div>`;
+      }).join('');
+      return`<div class="venda-card">
+        <div class="venda-card-hdr">
+          <div><div class="venda-card-titulo">Venda #${v.Cod}</div>
+            <div class="venda-card-data">${fmtD(v.DataVenda)}${v.Vendedor?' · '+esc(v.Vendedor):''} · ${esc(v.FormaPagamento||'')}</div>
+            <div class="venda-card-badges">
+              <span class="badge ${v.StatusPagamento==='Pago'?'pago':'pendente'}">${v.StatusPagamento||'Pendente'}</span>
+              <span class="badge ${eS}">${eL}</span>
+            </div>
+          </div>
+        </div>
+        ${itensHTML}
+        <div class="venda-card-footer"><span style="color:var(--text-muted)">${myIt.length} item(ns)</span>
+          <span class="venda-card-total">${fmt$(tot)}</span></div>
+      </div>`;
+    }).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" data-action="voltar" data-mod="clientes"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">Histórico do cliente</div>
+    </div>
+    <div class="relcli-body">
+      <div class="relcli-header">
+        <div class="relcli-av">${initials(cli.Nome)}</div>
+        <div class="relcli-info"><div class="relcli-nome">${esc(cli.Nome)}</div>
+          <div class="relcli-sub">${esc(cli.Cidade||'')}${cli.Whats?' · '+esc(cli.Whats):''}${cli.Classificacao?' · '+esc(cli.Classificacao):''}</div>
+        </div>
+      </div>
+      <div class="relcli-resumo">
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Total</div><div class="relcli-mcard-value">${fmt$(totalGeral)}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Pago</div><div class="relcli-mcard-value ok">${fmt$(totalPago)}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">A receber</div><div class="relcli-mcard-value ${totalPend>0?'warn':''}">${fmt$(totalPend)}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Vendas</div><div class="relcli-mcard-value">${vendas.length}</div></div>
+      </div>
+      <div class="fin-sec">Todas as vendas</div>${vendasHTML}
+    </div>
+  </div>`;
+}
+
+// ===== HISTÓRICO DE COMPRAS POR INSUMO =====
+let relMPId=null;
+function abrirRelMP(cod){
+  relMPId=String(cod);
+  currentMod='relmp';
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  renderRelMP(document.getElementById('main-content'));
+}
+function renderRelMP(c){
+  const mp=(DB.MateriaPrima||[]).find(x=>String(x.Cod)===String(relMPId));
+  if(!mp){c.innerHTML='<div class="empty-list"><p>Insumo não encontrado.</p></div>';return;}
+  const ci=(DB.ComprasItens||[]).filter(i=>String(i.CodInsumo)===String(relMPId));
+  const comps=DB.Compras||[];const fornecs=DB.Fornecedor||[];
+  const comprasIns=ci.map(item=>{
+    const cab=comps.find(x=>String(x.Cod)===String(item.CodCompra));
+    const f=fornecs.find(x=>String(x.Cod)===String(cab?cab.Fornecedor:''));
+    return{data:cab?cab.DataEntrada:'',fornecedor:f?f.Fornecedor:(cab?'Fornecedor '+cab.Fornecedor:'—'),
+      nf:cab?cab.NF||'—':'—',qtd:Number(item.Quantidade||0),vunit:Number(item.ValorUnitario||0),
+      vtotal:Number(item.ValorTotal||0),status:cab?cab.StatusPagamento:'—'};
+  }).filter(x=>x.data).sort((a,b)=>b.data.localeCompare(a.data));
+  const precos=comprasIns.map(x=>x.vunit).filter(v=>v>0);
+  const pMin=precos.length?Math.min(...precos):0,pMax=precos.length?Math.max(...precos):0;
+  const pMed=precos.length?precos.reduce((s,v)=>s+v,0)/precos.length:0;
+  const ul=comprasIns.length?comprasIns[0].vunit:0;
+  const totalGasto=comprasIns.reduce((s,x)=>s+x.vtotal,0);
+  const analise=precos.length>1?`<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap">
+    <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Menor preço</div><div style="font-size:16px;font-weight:600;color:var(--text-success)">${fmt$(pMin)}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Maior preço</div><div style="font-size:16px;font-weight:600;color:var(--text-danger)">${fmt$(pMax)}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Variação</div><div style="font-size:16px;font-weight:600;color:var(--text-accent)">${pMin>0?((pMax-pMin)/pMin*100).toFixed(1)+'%':'—'}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Total gasto</div><div style="font-size:16px;font-weight:600">${fmt$(totalGasto)}</div></div>
+  </div>`:'';
+  const cards=comprasIns.length===0
+    ?'<div class="empty-list" style="padding:30px 0"><p>Nenhuma compra registrada.</p></div>'
+    :comprasIns.map((x,i)=>{
+      const isUlt=i===0,isMB=precos.length>1&&x.vunit===pMin,isMC=precos.length>1&&x.vunit===pMax;
+      let tag='';
+      if(isUlt)tag+='<span class="preco-tag">Mais recente</span> ';
+      if(isMB)tag+='<span class="preco-tag mais-barato">Menor preço</span> ';
+      if(isMC)tag+='<span class="preco-tag mais-caro">Maior preço</span>';
+      return`<div class="compra-card">
+        <div class="compra-card-hdr">
+          <div><div class="compra-card-forn">${esc(x.fornecedor)}</div>
+            <div class="compra-card-data">${fmtD(x.data)} · NF ${esc(x.nf)}</div></div>
+          <span class="badge ${x.status==='Pago'?'pago':'pendente'}">${x.status}</span>
+        </div>
+        <div class="compra-card-body">
+          <div class="compra-stat"><div class="compra-stat-label">Quantidade</div>
+            <div class="compra-stat-value">${x.qtd.toFixed(2)} ${esc(mp.Unidade||'')}</div></div>
+          <div class="compra-stat"><div class="compra-stat-label">Valor unitário</div>
+            <div class="compra-stat-value gold">${fmt$(x.vunit)}</div>
+            ${tag?`<div class="preco-line">${tag}</div>`:''}
+          </div>
+          <div class="compra-stat"><div class="compra-stat-label">Total</div>
+            <div class="compra-stat-value">${fmt$(x.vtotal)}</div></div>
+        </div>
+      </div>`;
+    }).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" data-action="voltar" data-mod="mp"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">Histórico do insumo</div>
+    </div>
+    <div class="relmp-body">
+      <div class="relmp-header">
+        <div class="relmp-av">${initials(mp.Item)}</div>
+        <div class="relcli-info"><div class="relcli-nome">${esc(mp.Item)}</div>
+          <div class="relcli-sub">${esc(mp.Grupo||'—')} · ${esc(mp.Unidade||'')} · Mín: ${mp.EstoqueMinimo||0}</div>
+        </div>
+      </div>
+      <div class="relcli-resumo">
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Compras</div><div class="relcli-mcard-value">${comprasIns.length}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Estoque</div><div class="relcli-mcard-value ${mp.AlertaEstoqueBaixo?'warn':''}">${Number(mp.EstoqueAtual||0).toFixed(2)}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Último preço</div><div class="relcli-mcard-value gold">${fmt$(ul)}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Preço médio</div><div class="relcli-mcard-value">${fmt$(pMed)}</div></div>
+      </div>
+      ${analise}
+      <div class="fin-sec">Histórico de compras (${comprasIns.length})</div>${cards}
+    </div>
+  </div>`;
+}
+
+// ===== DETALHE DE COMPRA =====
+function abrirDetalheCompra(codCompra){
+  const c=document.getElementById('main-content');
+  const comp=(DB.Compras||[]).find(x=>String(x.Cod)===String(codCompra));
+  if(!comp){toast('Compra não encontrada','e');return;}
+  const forn=(DB.Fornecedor||[]).find(x=>String(x.Cod)===String(comp.Fornecedor));
+  const itens=(DB.ComprasItens||[]).filter(i=>String(i.CodCompra)===String(codCompra));
+  const mp=DB.MateriaPrima||[];
+  const total=itens.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
+  const itensHTML=itens.map(i=>{
+    const ins=mp.find(m=>String(m.Cod)===String(i.CodInsumo));
+    return`<div class="venda-card-item">
+      <div><div class="venda-card-item-nome">${esc(ins?ins.Item:'Insumo '+i.CodInsumo)}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${i.Quantidade} ${esc(i.Unidade||'')} × ${fmt$(i.ValorUnitario)}</div>
+      </div>
+      <span class="venda-card-item-val">${fmt$(i.ValorTotal)}</span>
+    </div>`;
+  }).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" data-action="voltar" data-mod="compras"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">Detalhe da compra</div>
+    </div>
+    <div class="relcli-body">
+      <div class="relmp-header" style="margin-bottom:16px">
+        <div class="relmp-av">${initials(forn?forn.Fornecedor:'?')}</div>
+        <div class="relcli-info">
+          <div class="relcli-nome">${esc(forn?forn.Fornecedor:'Fornecedor '+comp.Fornecedor)}</div>
+          <div class="relcli-sub">NF ${esc(comp.NF||'—')} · ${fmtD(comp.DataEntrada)}</div>
+        </div>
+        <span class="badge ${comp.StatusPagamento==='Pago'?'pago':'pendente'}">${comp.StatusPagamento||'—'}</span>
+      </div>
+      <div class="relcli-resumo">
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Itens</div><div class="relcli-mcard-value">${itens.length}</div></div>
+        <div class="relcli-mcard"><div class="relcli-mcard-label">Total</div><div class="relcli-mcard-value">${fmt$(total)}</div></div>
+        ${comp.DataPagamento?`<div class="relcli-mcard"><div class="relcli-mcard-label">Pago em</div><div class="relcli-mcard-value">${fmtD(comp.DataPagamento)}</div></div>`:''}
+      </div>
+      <div class="fin-sec">Itens da compra</div>
+      <div class="venda-card">${itensHTML||'<div class="venda-card-item" style="color:var(--text-muted)">Sem itens.</div>'}</div>
+    </div>
+  </div>`;
+}
+
+// ===== PAINEL FINANCEIRO =====
+function renderFinanceiro(){
+  const hoje=new Date(),mes=hoje.toISOString().slice(0,7);
+  return`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header"><div class="mod-title">Painel Financeiro</div></div>
+    <div class="fin-body">
+      <div class="fin-filtros">
+        <div class="fin-filtros-title">Período</div>
+        <div class="fin-tabs">
+          <button class="fin-tab on" id="ftab-mes" onclick="setFinTab('mes')">Por mês</button>
+          <button class="fin-tab" id="ftab-periodo" onclick="setFinTab('periodo')">Período livre</button>
+        </div>
+        <div id="fin-filtro-mes">
+          <div class="fin-row">
+            <div class="fg"><label class="fl">Mês / Ano</label><input class="fi" type="month" id="fin-mes" value="${mes}"></div>
+            <button class="btn-filtrar" onclick="calcFinanceiro()">Calcular</button>
+          </div>
+        </div>
+        <div id="fin-filtro-periodo" style="display:none">
+          <div class="fin-row">
+            <div class="fg"><label class="fl">Data início</label><input class="fi" type="date" id="fin-dt-ini" value="${hoje.getFullYear()}-01-01"></div>
+            <div class="fg"><label class="fl">Data fim</label><input class="fi" type="date" id="fin-dt-fim" value="${hoje.toISOString().split('T')[0]}"></div>
+            <button class="btn-filtrar" onclick="calcFinanceiro()">Calcular</button>
+          </div>
+        </div>
+      </div>
+      <div id="fin-resultado"></div>
+    </div>
+  </div>`;
+}
+function setFinTab(tab){
+  document.getElementById('ftab-mes').classList.toggle('on',tab==='mes');
+  document.getElementById('ftab-periodo').classList.toggle('on',tab==='periodo');
+  document.getElementById('fin-filtro-mes').style.display=tab==='mes'?'block':'none';
+  document.getElementById('fin-filtro-periodo').style.display=tab==='periodo'?'block':'none';
+}
+function calcFinanceiro(){
+  const tabMes=document.getElementById('ftab-mes').classList.contains('on');
+  let dtIni,dtFim;
+  if(tabMes){
+    const mes=document.getElementById('fin-mes').value;
+    if(!mes){toast('Selecione o mês','e');return;}
+    dtIni=mes+'-01';
+    const[y,m]=mes.split('-').map(Number);
+    dtFim=mes+'-'+String(new Date(y,m,0).getDate()).padStart(2,'0');
+  }else{
+    dtIni=document.getElementById('fin-dt-ini').value;
+    dtFim=document.getElementById('fin-dt-fim').value;
+    if(!dtIni||!dtFim){toast('Informe as datas','e');return;}
+  }
+  const vendas=DB.Vendas||[],vi=DB.VendasItens||[],compras=DB.Compras||[],ci=DB.ComprasItens||[];
+  const clientes=DB.Cliente||[],fornecs=DB.Fornecedor||[];
+  const vPeriodo=vendas.filter(v=>{const d=v.DataVenda||'';return d>=dtIni&&d<=dtFim;});
+  const cPeriodo=compras.filter(c=>{const d=c.DataEntrada||'';return d>=dtIni&&d<=dtFim;});
+  const totalEnt=vPeriodo.filter(v=>v.StatusPagamento==='Pago').reduce((s,v)=>{
+    return s+vi.filter(i=>String(i.CodVenda)===String(v.Cod)).reduce((ss,i)=>ss+Number(i.ValorTotal||0),0);},0);
+  const totalPendRec=vPeriodo.filter(v=>v.StatusPagamento!=='Pago').reduce((s,v)=>{
+    return s+vi.filter(i=>String(i.CodVenda)===String(v.Cod)).reduce((ss,i)=>ss+Number(i.ValorTotal||0),0);},0);
+  const totalSai=cPeriodo.filter(c=>c.StatusPagamento==='Pago').reduce((s,c)=>{
+    return s+ci.filter(i=>String(i.CodCompra)===String(c.Cod)).reduce((ss,i)=>ss+Number(i.ValorTotal||0),0);},0);
+  const totalPendPag=cPeriodo.filter(c=>c.StatusPagamento!=='Pago').reduce((s,c)=>{
+    return s+ci.filter(i=>String(i.CodCompra)===String(c.Cod)).reduce((ss,i)=>ss+Number(i.ValorTotal||0),0);},0);
+  const saldo=totalEnt-totalSai;
+  const periodoLabel=tabMes?document.getElementById('fin-mes').value.split('-').reverse().join('/'):fmtD(dtIni)+' → '+fmtD(dtFim);
+  const detV=vPeriodo.map(v=>{
+    const cli=clientes.find(x=>String(x.Cod)===String(v.CodCliente));
+    const it=vi.filter(i=>String(i.CodVenda)===String(v.Cod));
+    const tot=it.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
+    return`<div class="fin-item"><div class="fin-item-left">
+      <div class="fin-item-nome">${esc(cli?cli.Nome:'Cliente '+v.CodCliente)}</div>
+      <div class="fin-item-sub">Venda #${v.Cod} · ${fmtD(v.DataVenda)} · ${it.length} item(ns) ·
+        <span class="badge ${v.StatusPagamento==='Pago'?'pago':'pendente'}" style="font-size:11px">${v.StatusPagamento||'Pendente'}</span></div>
+    </div><span class="fin-item-valor e">${fmt$(tot)}</span></div>`;
+  }).join('')||'<p style="font-size:13px;color:var(--text-muted)">Nenhuma venda.</p>';
+  const detC=cPeriodo.map(c=>{
+    const f=fornecs.find(x=>String(x.Cod)===String(c.Fornecedor));
+    const it=ci.filter(i=>String(i.CodCompra)===String(c.Cod));
+    const tot=it.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
+    return`<div class="fin-item"><div class="fin-item-left">
+      <div class="fin-item-nome">${esc(f?f.Fornecedor:'Fornecedor '+c.Fornecedor)}</div>
+      <div class="fin-item-sub">NF ${esc(c.NF||'—')} · ${fmtD(c.DataEntrada)} ·
+        <span class="badge ${c.StatusPagamento==='Pago'?'pago':'pendente'}" style="font-size:11px">${c.StatusPagamento||'Pendente'}</span></div>
+    </div><span class="fin-item-valor s">${fmt$(tot)}</span></div>`;
+  }).join('')||'<p style="font-size:13px;color:var(--text-muted)">Nenhuma compra.</p>';
+  document.getElementById('fin-resultado').innerHTML=`
+    <div class="fin-resumo">
+      <div class="fin-card entrada"><div class="fin-card-label">Entradas (recebidas)</div><div class="fin-card-value">${fmt$(totalEnt)}</div></div>
+      <div class="fin-card saida"><div class="fin-card-label">Saídas (pagas)</div><div class="fin-card-value">${fmt$(totalSai)}</div></div>
+      <div class="fin-card ${saldo>=0?'saldo-pos':'saldo-neg'}"><div class="fin-card-label">Saldo</div><div class="fin-card-value">${fmt$(saldo)}</div></div>
+    </div>
+    ${(totalPendRec>0||totalPendPag>0)?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+      ${totalPendRec>0?`<div style="background:var(--bg-warning);border:1px solid var(--border-warning);border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;color:var(--text-warning);font-weight:500;text-transform:uppercase">A receber</div>
+        <div style="font-size:18px;font-weight:700;color:var(--text-warning)">${fmt$(totalPendRec)}</div></div>`:''}
+      ${totalPendPag>0?`<div style="background:var(--bg-danger);border:1px solid var(--border-danger);border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;color:var(--text-danger);font-weight:500;text-transform:uppercase">A pagar</div>
+        <div style="font-size:18px;font-weight:700;color:var(--text-danger)">${fmt$(totalPendPag)}</div></div>`:''}
+    </div>`:''}
+    <div class="fin-sec">Vendas — ${periodoLabel}</div>${detV}
+    <div class="fin-sec">Compras — ${periodoLabel}</div>${detC}`;
+}
+
 if(URL_API){loadAll().then(ok=>{if(ok)render();else render();});}
 else{render();}
 </script>
