@@ -22,9 +22,9 @@
   --radius:8px;--shadow:0 1px 4px rgba(44,36,22,.08);--shadow-md:0 4px 16px rgba(44,36,22,.12);
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--cream);color:var(--text-primary);font-size:15px;min-height:100vh}
-
+ 
 .app{display:flex;flex-direction:column;min-height:100vh;max-width:900px;margin:0 auto;background:var(--surface);box-shadow:var(--shadow-md)}
-
+ 
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10}
 .brand{display:flex;align-items:center;gap:10px}
@@ -35,7 +35,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;flex-shrink:0}
 .dot.off{background:#E53935}.dot.spin{background:#FB8C00;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
+ 
 /* NAV */
 .nav{display:flex;flex-direction:column;border-bottom:1px solid var(--border);background:var(--surface-2)}
 .nav-row{display:flex;align-items:center;gap:2px;padding:4px 10px;border-bottom:0.5px solid var(--border)}
@@ -51,15 +51,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nb:hover{background:var(--surface-3);color:var(--text-primary)}
 .nb.on{background:var(--bg-accent);color:var(--text-accent);font-weight:500}
 .nb i{font-size:15px}
-
+ 
 /* ALERTS */
 .alerts{display:none;padding:8px 16px;background:var(--bg-warning);border-bottom:1px solid var(--border-warning);gap:8px;flex-wrap:wrap}
 .alerts.on{display:flex}
 .achip{font-size:12px;color:var(--text-warning);background:rgba(0,0,0,.05);padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
-
+ 
 /* MAIN CONTENT */
 #main-content{flex:1;display:flex;flex-direction:column}
-
+ 
 /* URL CONFIG */
 .url-screen{flex:1;display:flex;align-items:center;justify-content:center;padding:24px}
 .url-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;max-width:480px;width:100%;box-shadow:var(--shadow)}
@@ -71,7 +71,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-connect{width:100%;padding:11px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer}
 .url-hint{font-size:11px;color:var(--text-muted);margin-top:10px;line-height:1.5}
 .url-change{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
-
+ 
 /* DASHBOARD */
 .dash-body{padding:18px;overflow-y:auto;flex:1}
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:22px}
@@ -83,7 +83,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dash-alert-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:7px;box-shadow:var(--shadow)}
 .dai-name{font-size:14px;font-weight:500}
 .dai-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
-
+ 
 /* MODULE HEADER */
 .mod-header{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);position:sticky;top:0;z-index:9}
 .mod-title{font-size:16px;font-weight:600;flex:1}
@@ -91,14 +91,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-back:hover{color:var(--text-primary);background:var(--surface-2)}
 .btn-new{display:flex;align-items:center;gap:6px;padding:8px 15px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 1px 4px rgba(184,134,11,.25)}
 .btn-new:hover{opacity:.9}
-
+ 
 /* LIST VIEW */
 .search-bar{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
 .search-wrap{position:relative}
 .search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:16px;pointer-events:none}
 .search-input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:13px;background:var(--surface);color:var(--text-primary)}
 .search-input:focus{outline:none;border-color:var(--gold)}
-
+ 
 .list-body{overflow-y:auto}
 .list-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px;transition:background .1s}
 .list-item:hover{background:var(--surface-2)}
@@ -122,11 +122,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bi{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:6px;border-radius:var(--radius);display:flex;align-items:center;transition:all .1s}
 .bi:hover{color:var(--text-primary);background:var(--surface-3)}
 .bi i{font-size:17px}
-
+ 
 .empty-list{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;color:var(--text-muted);gap:10px}
 .empty-list i{font-size:40px;opacity:.25}
 .empty-list p{font-size:13px;text-align:center}
-
+ 
 /* FORM VIEW */
 .form-view{flex:1;display:flex;flex-direction:column}
 .form-scroll{flex:1;overflow-y:auto;padding:20px 18px}
@@ -139,13 +139,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239C9080' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:480px){.frow{grid-template-columns:1fr}}
-
+ 
 .form-footer{padding:14px 18px;border-top:1px solid var(--border);background:var(--surface);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0}
 .btn-cancel{padding:9px 16px;background:none;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:13px;cursor:pointer;color:var(--text-secondary)}
 .btn-cancel:hover{background:var(--surface-2)}
 .btn-save{display:flex;align-items:center;gap:6px;padding:9px 18px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer}
 .btn-save:hover{opacity:.9}
-
+ 
 /* ITENS DINÂMICOS */
 .itens-box{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:4px}
 .itens-box-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text-secondary)}
@@ -158,7 +158,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .btn-rem:hover{color:var(--text-danger)}
 .btn-add-row{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border:none;background:var(--surface-2);font-size:12px;color:var(--text-muted);cursor:pointer;transition:all .15s}
 .btn-add-row:hover{background:var(--surface-3);color:var(--text-primary)}
-
+ 
 /* RECEITAS */
 .receita-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
 .rc-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
@@ -166,13 +166,13 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .rc-custo{font-size:13px;color:var(--text-accent);font-weight:600}
 .rc-item{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-secondary)}
 .rc-item:last-child{border-bottom:none}
-
+ 
 /* PRODUÇÃO — custo preview */
 .custo-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:12px}
 .custo-box-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
 .custo-valor{font-size:22px;font-weight:600;color:var(--text-accent);margin:4px 0 10px}
 .custo-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:5px 0;border-top:1px solid var(--border)}
-
+ 
 /* ENTREGAS MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:60px 16px 20px;z-index:200}
 .modal{background:var(--surface);border-radius:14px;border:1px solid var(--border);width:100%;max-width:440px;box-shadow:var(--shadow-md)}
@@ -185,8 +185,8 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .entrega-row:last-child{border-bottom:none}
 .toggle-ent{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;color:var(--text-secondary)}
 .toggle-ent input{width:16px;height:16px;cursor:pointer;accent-color:var(--gold)}
-
-
+ 
+ 
 /* FINANCEIRO */
 .fin-body{padding:18px;overflow-y:auto;flex:1}
 .fin-filtros{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:18px}
@@ -220,7 +220,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .fin-item-valor{font-weight:600;white-space:nowrap;margin-left:12px}
 .fin-item-valor.e{color:var(--text-success)}
 .fin-item-valor.s{color:var(--text-danger)}
-
+ 
 /* RELATÓRIO CLIENTE */
 .relcli-body{padding:18px;overflow-y:auto;flex:1}
 .relcli-header{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
@@ -245,8 +245,8 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .venda-card-item-val{font-weight:500}
 .venda-card-footer{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;background:var(--surface-2);border-top:1px solid var(--border);font-size:13px}
 .venda-card-total{font-weight:700;color:var(--text-accent)}
-
-
+ 
+ 
 /* HISTÓRICO INSUMO */
 .relmp-body{padding:18px;overflow-y:auto;flex:1}
 .relmp-header{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
@@ -264,8 +264,8 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .preco-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:var(--bg-accent);color:var(--text-accent)}
 .preco-tag.mais-barato{background:var(--bg-success);color:var(--text-success)}
 .preco-tag.mais-caro{background:var(--bg-danger);color:var(--text-danger)}
-
-
+ 
+ 
 /* PERSONALIZADOS */
 .pers-body{padding:18px;overflow-y:auto;flex:1}
 .pers-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
@@ -276,8 +276,8 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .pers-card-item{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-secondary)}
 .pers-card-item:last-child{border-bottom:none}
 .pers-card-obs{padding:10px 16px;font-size:12px;color:var(--text-muted);border-top:1px solid var(--border);background:var(--surface-2);font-style:italic}
-
-
+ 
+ 
 /* CALCULADORA DE LOTE */
 .calc-body{padding:18px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px}
 .calc-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
@@ -293,7 +293,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .btn-calcular{width:100%;padding:12px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-calcular:hover{opacity:.9}
 .btn-calcular i{font-size:16px}
-
+ 
 /* Resultado */
 .calc-result{display:none}
 .calc-result.show{display:block}
@@ -305,7 +305,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-rec-item:last-child{border-bottom:none}
 .calc-rec-item-nome{color:var(--text-secondary)}
 .calc-rec-item-qtd{font-weight:600;color:var(--text-primary)}
-
+ 
 /* Resumo total */
 .calc-total-bloco{background:var(--bg-accent);border:1px solid var(--border-accent);border-radius:12px;overflow:hidden}
 .calc-total-hdr{padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border-accent)}
@@ -318,8 +318,8 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-empty{text-align:center;padding:20px;font-size:13px;color:var(--text-muted)}
 .calc-sel-all{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;padding:0}
 .calc-sel-all:hover{text-decoration:underline}
-
-
+ 
+ 
 /* PERSONALIZADOS */
 .pers-body{padding:18px;overflow-y:auto;flex:1}
 .pers-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
@@ -363,13 +363,24 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-empty{text-align:center;padding:20px;font-size:13px;color:var(--text-muted)}
 .calc-sel-all{font-size:12px;color:var(--text-accent);background:none;border:none;cursor:pointer;padding:0}
 .calc-sel-all:hover{text-decoration:underline}
-
-
+ 
+ 
 /* CUSTOS EXTRAS */
 .ce-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-3);color:var(--text-secondary);margin-left:4px}
 .rc-footer{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg-accent);border-top:1px solid var(--border-accent);font-size:13px;font-weight:600}
 .rc-footer-custo{color:var(--text-accent);font-size:15px}
-
+ 
+ 
+/* SELECT COM BUSCA */
+.sel-busca-wrap{position:relative}
+.sel-busca-input{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:14px;background:var(--surface);color:var(--text-primary)}
+.sel-busca-input:focus{outline:none;border-color:var(--gold)}
+.sel-busca-list{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border-strong);border-top:none;border-radius:0 0 var(--radius) var(--radius);max-height:200px;overflow-y:auto;z-index:50;display:none;box-shadow:var(--shadow-md)}
+.sel-busca-list.show{display:block}
+.sel-busca-opt{padding:9px 12px;font-size:13px;cursor:pointer;color:var(--text-primary)}
+.sel-busca-opt:hover,.sel-busca-opt.selected{background:var(--bg-accent);color:var(--text-accent)}
+.sel-busca-empty{padding:9px 12px;font-size:13px;color:var(--text-muted);font-style:italic}
+ 
 /* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--radius);font-size:13px;z-index:300;display:none;align-items:center;gap:8px;white-space:nowrap;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md)}
 .toast.on{display:flex}
@@ -386,9 +397,9 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
     </div>
     <div class="conn"><span class="dot spin" id="sdot"></span><span id="stxt">Conectando...</span></div>
   </div>
-
+ 
   <div class="alerts" id="alerts-bar"></div>
-
+ 
   <div class="nav" id="nav">
     <!-- Linha 0: Dashboard sozinho -->
     <div class="nav-row">
@@ -418,16 +429,16 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
       <button class="nb" onclick="goMod('calculadora')" data-mod="calculadora"><i class="ti ti-calculator"></i>Calculadora</button>
     </div>
   </div>
-
+ 
   <div id="main-content"></div>
 </div>
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 const SKEY='lumo_url_v3';
 let URL_API=localStorage.getItem(SKEY)||'';
 let DB={};
-
+ 
 // Delegação de eventos para botões gerados dinamicamente
 document.addEventListener('click', function(e){
   const btn = e.target.closest('[data-action]');
@@ -437,6 +448,7 @@ document.addEventListener('click', function(e){
   if(action==='edit-pers')   { openFormPers(cod); }
   if(action==='del-pers')    { delPers(cod); }
   if(action==='edit-receita'){ openForm('receitas', cod); }
+  if(action==='dup-receita')  { duplicarReceita(cod); }
   if(action==='abrirRelCli') { abrirRelCliente(cod); }
   if(action==='abrirRelMP')  { abrirRelMP(cod); }
   if(action==='openEntregas'){ openEntregas(cod); }
@@ -451,18 +463,18 @@ document.addEventListener('click', function(e){
   if(action==='del-ce'){ delCustoExtra(Number(btn.dataset.idx)); }
   if(action==='save-ce'){ const i=Number(btn.dataset.idx); saveCustoExtra(i===-1?null:i); }
 });
-
+ 
 let currentMod='dashboard';
 let editId=null;
-
+ 
 const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote'};
-
+ 
 function fmt$(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function fmtD(d){if(!d)return'';try{const p=String(d).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d}catch(e){return d}}
 function today(){return new Date().toISOString().split('T')[0]}
 function initials(n){return String(n||'?').trim().split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase()}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
+ 
 function toast(msg,type='s'){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast on '+type;
@@ -472,7 +484,7 @@ function setConn(s,txt){
   document.getElementById('stxt').textContent=txt;
   document.getElementById('sdot').className='dot'+(s==='ok'?'':s==='err'?' off':' spin');
 }
-
+ 
 async function api(params){
   if(!URL_API)return{error:'sem url'};
   try{
@@ -483,14 +495,14 @@ async function api(params){
     return JSON.parse(txt);
   }catch(e){return{error:e.message}}
 }
-
+ 
 async function loadAll(){
   setConn('loading','Carregando...');
   const r=await api({action:'getAll'});
   if(r.error){setConn('err','Erro de conexão');toast('Erro ao conectar: '+r.error,'e');return false;}
   DB=r;setConn('ok','Conectado');renderAlerts();return true;
 }
-
+ 
 function renderAlerts(){
   const bar=document.getElementById('alerts-bar');
   const al=[];
@@ -499,13 +511,13 @@ function renderAlerts(){
   if(al.length){bar.className='alerts on';bar.innerHTML=al.map(a=>`<span class="achip"><i class="ti ti-alert-triangle" style="font-size:13px"></i>${a}</span>`).join('');}
   else bar.className='alerts';
 }
-
+ 
 function goMod(mod){
   currentMod=mod;editId=null;
   document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('on',b.dataset.mod===mod));
   render();
 }
-
+ 
 function render(){
   const c=document.getElementById('main-content');
   if(!URL_API){c.innerHTML=renderURL();return;}
@@ -526,12 +538,12 @@ function render(){
     <div class="list-body" id="list-body">${renderListItems(currentMod,'')}</div>
   </div>`;
 }
-
+ 
 function filterList(q){
   const body=document.getElementById('list-body');
   if(body)body.innerHTML=renderListItems(currentMod,q.toLowerCase().trim());
 }
-
+ 
 function renderURL(){
   return`<div class="url-screen"><div class="url-card">
     <h2>🕯️ Conectar à planilha</h2>
@@ -542,7 +554,7 @@ function renderURL(){
     <p class="url-hint">A URL é salva automaticamente neste navegador. Em outro dispositivo, será solicitada novamente uma vez.</p>
   </div></div>`;
 }
-
+ 
 async function saveURL(){
   const v=document.getElementById('url-inp').value.trim();
   if(!v||!v.startsWith('http')){toast('Cole uma URL válida','e');return;}
@@ -550,7 +562,7 @@ async function saveURL(){
   const ok=await loadAll();
   if(ok)render();
 }
-
+ 
 function renderDash(){
   const mp=DB.MateriaPrima||[],prods=DB.Produtos||[],cli=DB.Cliente||[],comp=DB.Compras||[],vend=DB.Vendas||[];
   const mes=new Date().toISOString().slice(0,7);
@@ -559,12 +571,12 @@ function renderDash(){
   const totalVendMes=(DB.VendasItens||[]).filter(i=>{const v=vend.find(x=>String(x.Cod)===String(i.CodVenda));return v&&String(v.DataVenda||'').startsWith(mes);}).reduce((s,i)=>s+Number(i.ValorTotal||0),0);
   const alerts=[...mp.filter(m=>m.AlertaEstoqueBaixo),...prods.filter(p=>p.AlertaEstoqueBaixo)];
   const pend=[...comp.filter(c=>c.StatusPagamento==='Pendente'),...vend.filter(v=>v.StatusPagamento==='Pendente')].length;
-
+ 
   const alertsHTML=alerts.length?alerts.map(a=>{
     const isMP=a.Item!==undefined;
     return`<div class="dash-alert-item"><div><div class="dai-name">${esc(isMP?a.Item:a.Produto)}</div><div class="dai-sub">${isMP?'Insumo':'Produto'} · Atual: ${Number(a.EstoqueAtual||0).toFixed(isMP?2:0)} / Mín: ${a.EstoqueMinimo||0}</div></div><span class="badge alerta">Baixo</span></div>`;
   }).join(''):`<p style="font-size:13px;color:var(--text-muted);padding:4px 0">Nenhum alerta no momento. ✓</p>`;
-
+ 
   return`<div class="dash-body">
     <div class="dash-grid">
       <div class="mcard"><div class="mcard-label">Receita do mês</div><div class="mcard-value" style="font-size:18px">${fmt$(totalVendMes)}</div></div>
@@ -579,12 +591,12 @@ function renderDash(){
     <div style="margin-top:20px;text-align:right"><button class="url-change" onclick="resetURL()">Trocar URL da planilha</button></div>
   </div>`;
 }
-
+ 
 function resetURL(){
   if(!confirm('Deseja trocar a URL do Apps Script?'))return;
   URL_API='';localStorage.removeItem(SKEY);render();
 }
-
+ 
 /* ===== LISTAGENS ===== */
 function renderListItems(mod,q){
   let items=[];
@@ -602,9 +614,9 @@ function renderListItems(mod,q){
   if(!items.length)return`<div class="empty-list"><i class="ti ti-inbox"></i><p>Nenhum registro encontrado.</p></div>`;
   return items.map(i=>i.h).join('');
 }
-
+ 
 function listMP(){
-  return(DB.MateriaPrima||[]).map(m=>({
+  return(DB.MateriaPrima||[]).slice().sort((a,b)=>(a.Item||"").localeCompare(b.Item||"","pt")).map(m=>({
     s:(m.Item+m.Grupo+m.Unidade).toLowerCase(),
     h:`<div class="list-item">
       <div class="li-av">${initials(m.Item)}</div>
@@ -618,9 +630,9 @@ function listMP(){
       </div></div>`
   }));
 }
-
+ 
 function listProdutos(){
-  return(DB.Produtos||[]).map(p=>({
+  return(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt")).map(p=>({
     s:(p.Produto+p.Grupo+p.Colecao).toLowerCase(),
     h:`<div class="list-item">
       <div class="li-av t">${initials(p.Produto)}</div>
@@ -633,9 +645,9 @@ function listProdutos(){
       </div></div>`
   }));
 }
-
+ 
 function listClientes(){
-  return(DB.Cliente||[]).map(c=>({
+  return(DB.Cliente||[]).slice().sort((a,b)=>(a.Nome||"").localeCompare(b.Nome||"","pt")).map(c=>({
     s:(c.Nome+c.Cidade+c.Classificacao+c.Whats).toLowerCase(),
     h:`<div class="list-item">
       <div class="li-av">${initials(c.Nome)}</div>
@@ -648,9 +660,9 @@ function listClientes(){
       </div></div>`
   }));
 }
-
+ 
 function listFornecedores(){
-  return(DB.Fornecedor||[]).map(f=>({
+  return(DB.Fornecedor||[]).slice().sort((a,b)=>(a.Fornecedor||"").localeCompare(b.Fornecedor||"","pt")).map(f=>({
     s:(f.Fornecedor+f.Cidade+f.CNPJ+f.Email).toLowerCase(),
     h:`<div class="list-item">
       <div class="li-av c">${initials(f.Fornecedor)}</div>
@@ -662,10 +674,10 @@ function listFornecedores(){
       </div></div>`
   }));
 }
-
+ 
 function listCompras(){
   const forn=DB.Fornecedor||[],itens=DB.ComprasItens||[];
-  return(DB.Compras||[]).map(c=>{
+  return(DB.Compras||[]).slice().sort((a,b)=>(b.DataEntrada||"").localeCompare(a.DataEntrada||"")).map(c=>{
     const f=forn.find(x=>String(x.Cod)===String(c.Fornecedor));
     const myIt=itens.filter(i=>String(i.CodCompra)===String(c.Cod));
     const total=myIt.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
@@ -682,10 +694,10 @@ function listCompras(){
     };
   });
 }
-
+ 
 function listVendas(){
   const cli=DB.Cliente||[],itens=DB.VendasItens||[];
-  return(DB.Vendas||[]).map(v=>{
+  return(DB.Vendas||[]).slice().sort((a,b)=>(b.DataVenda||"").localeCompare(a.DataVenda||"")).map(v=>{
     const c=cli.find(x=>String(x.Cod)===String(v.CodCliente));
     const myIt=itens.filter(i=>String(i.CodVenda)===String(v.Cod));
     const total=myIt.reduce((s,i)=>s+Number(i.ValorTotal||0),0);
@@ -708,24 +720,24 @@ function listVendas(){
     };
   });
 }
-
+ 
 function listProducao(){
   const prods=DB.Produtos||[];
-  return(DB.Producao||[]).map(p=>{
+  return(DB.Producao||[]).slice().sort((a,b)=>(b.DataProducao||"").localeCompare(a.DataProducao||"")).map(p=>{
     const prod=prods.find(x=>String(x.Cod)===String(p.CodProduto));
     return{
       s:((prod?prod.Produto:'')+p.DataProducao).toLowerCase(),
       h:`<div class="list-item">
         <div class="li-av i"><i class="ti ti-hammer"></i></div>
         <div class="li-body"><div class="li-name">${esc(prod?prod.Produto:'Produto '+p.CodProduto)}</div>
-          <div class="li-sub">${p.Quantidade} un · ${fmtD(p.DataProducao)} · Custo: ${fmt$(p.CustoCalculado)}</div></div>
+          <div class="li-sub">${p.Quantidade} un · ${fmtD(p.DataProducao)} · Total: ${fmt$(p.CustoCalculado)} · <strong>1 un: ${fmt$(p.Quantidade>0?Number(p.CustoCalculado)/Number(p.Quantidade):0)}</strong></div></div>
         <div class="li-right">
           <button class="bi" data-action="del-rec" data-sheet="Producao" data-mod="producao" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
         </div></div>`
     };
   });
 }
-
+ 
 function renderReceitas(){
   const eng=DB.EngenhariaProduto||[],prods=DB.Produtos||[],mp=DB.MateriaPrima||[],ci=DB.ComprasItens||[],comp=DB.Compras||[];
   const byProd={};
@@ -746,19 +758,20 @@ function renderReceitas(){
         <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="rc-custo" title="Inclui custos extras">${fmt$(calcCustoComExtras(custo))}/un${custosExtras.length>0?'<span class="ce-badge">+extras</span>':''}</span>
+          <button class="bi" data-action="dup-receita" data-cod="${cp}" title="Duplicar receita"><i class="ti ti-copy"></i></button>
           <button class="bi" data-action="edit-receita" data-cod="${cp}" title="Editar"><i class="ti ti-edit"></i></button>
         </div>
       </div>${itensHTML}</div>`;
   }).join('')+'</div>';
 }
-
+ 
 function lastPrice(codInsumo,ci,comps){
   const found=ci.filter(i=>String(i.CodInsumo)===String(codInsumo));
   if(!found.length)return 0;
   return found.map(i=>{const c=comps.find(x=>String(x.Cod)===String(i.CodCompra));return{v:Number(i.ValorUnitario||0),d:c?c.DataEntrada:''};})
     .sort((a,b)=>new Date(b.d)-new Date(a.d))[0].v;
 }
-
+ 
 /* ===== FORMULÁRIOS ===== */
 function openForm(mod,id){
   editId=id;
@@ -775,14 +788,14 @@ function openForm(mod,id){
   }
   togglePgtoC();togglePgtoV();
 }
-
+ 
 function frmHdr(mod,label){
   return`<div class="mod-header">
     <button class="btn-back" data-action="voltar" data-mod="${mod}"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
     <div class="mod-title">${label}</div>
   </div>`;
 }
-
+ 
 function frmMP(id){
   const d=id?(DB.MateriaPrima||[]).find(x=>String(x.Cod)===String(id)):{};
   return frmHdr('mp',id?'Editar insumo':'Novo insumo')+`
@@ -801,7 +814,7 @@ function frmMP(id){
     <button class="btn-save" onclick="saveMP()"><i class="ti ti-check" style="font-size:14px"></i>Salvar insumo</button>
   </div></div>`;
 }
-
+ 
 function frmProduto(id){
   const d=id?(DB.Produtos||[]).find(x=>String(x.Cod)===String(id)):{};
   return frmHdr('produtos',id?'Editar produto':'Novo produto')+`
@@ -827,7 +840,7 @@ function frmProduto(id){
     <button class="btn-save" onclick="saveProduto()"><i class="ti ti-check" style="font-size:14px"></i>Salvar produto</button>
   </div></div>`;
 }
-
+ 
 function frmCliente(id){
   const d=id?(DB.Cliente||[]).find(x=>String(x.Cod)===String(id)):{};
   const classOpts=['Cliente Final','Parceiro','Outros'].map(o=>`<option ${d.Classificacao===o?'selected':''}>${o}</option>`).join('');
@@ -853,7 +866,7 @@ function frmCliente(id){
     <button class="btn-save" onclick="saveCliente()"><i class="ti ti-check" style="font-size:14px"></i>Salvar cliente</button>
   </div></div>`;
 }
-
+ 
 function frmFornecedor(id){
   const d=id?(DB.Fornecedor||[]).find(x=>String(x.Cod)===String(id)):{};
   return frmHdr('fornecedores',id?'Editar fornecedor':'Novo fornecedor')+`
@@ -876,9 +889,9 @@ function frmFornecedor(id){
     <button class="btn-save" onclick="saveFornecedor()"><i class="ti ti-check" style="font-size:14px"></i>Salvar fornecedor</button>
   </div></div>`;
 }
-
+ 
 function frmCompra(){
-  const forns=(DB.Fornecedor||[]).map(f=>`<option value="${f.Cod}">${esc(f.Fornecedor)}</option>`).join('');
+  const forns=(DB.Fornecedor||[]).slice().sort((a,b)=>(a.Fornecedor||"").localeCompare(b.Fornecedor||"","pt")).map(f=>`<option value="${f.Cod}">${esc(f.Fornecedor)}</option>`).join('');
   return frmHdr('compras','Nova compra')+`
   <div class="form-view"><div class="form-scroll">
     <div class="fsec">Dados da nota</div>
@@ -908,9 +921,9 @@ function frmCompra(){
     <button class="btn-save" onclick="saveCompra()"><i class="ti ti-check" style="font-size:14px"></i>Salvar compra</button>
   </div></div>`;
 }
-
+ 
 function frmVenda(){
-  const clis=(DB.Cliente||[]).map(c=>`<option value="${c.Cod}">${esc(c.Nome)}</option>`).join('');
+  const clis=(DB.Cliente||[]).slice().sort((a,b)=>(a.Nome||"").localeCompare(b.Nome||"","pt")).map(c=>`<option value="${c.Cod}">${esc(c.Nome)}</option>`).join('');
   return frmHdr('vendas','Nova venda')+`
   <div class="form-view"><div class="form-scroll">
     <div class="fsec">Dados da venda</div>
@@ -944,14 +957,14 @@ function frmVenda(){
     <button class="btn-save" onclick="saveVenda()"><i class="ti ti-check" style="font-size:14px"></i>Salvar venda</button>
   </div></div>`;
 }
-
+ 
 function frmReceita(id){
   const prods=(DB.Produtos||[]).map(p=>`<option value="${p.Cod}" ${String(id)===String(p.Cod)?'selected':''}>${esc(p.Produto)}</option>`).join('');
   return frmHdr('receitas',id?'Editar receita':'Nova receita')+`
   <div class="form-view"><div class="form-scroll">
     <div class="fsec">Produto</div>
     <div class="fg"><label class="fl">Selecione o produto *</label>
-      <select class="fi" id="f-r-prod" onchange="loadReceitaExistente(this.value)"><option value="">Selecione...</option>${prods}</select>
+      <div id="f-r-prod-wrap"></div>
     </div>
     <div class="fsec">Insumos necessários (receita)</div>
     <div class="itens-box">
@@ -965,14 +978,14 @@ function frmReceita(id){
     <button class="btn-save" onclick="saveReceita()"><i class="ti ti-check" style="font-size:14px"></i>Salvar receita</button>
   </div></div>`;
 }
-
+ 
 function frmProducao(){
-  const prods=(DB.Produtos||[]).map(p=>`<option value="${p.Cod}">${esc(p.Produto)}</option>`).join('');
+  const prods=(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt")).map(p=>`<option value="${p.Cod}">${esc(p.Produto)}</option>`).join('');
   return frmHdr('producao','Lançar produção')+`
   <div class="form-view"><div class="form-scroll">
     <div class="fsec">Produto a produzir</div>
     <div class="fg"><label class="fl">Produto *</label>
-      <select class="fi" id="f-pr-prod" onchange="calcCusto()"><option value="">Selecione...</option>${prods}</select>
+      <div id="f-pr-prod-wrap"></div>
     </div>
     <div class="frow">
       <div class="fg"><label class="fl">Quantidade produzida *</label><input class="fi" id="f-pr-qtd" type="number" min="1" placeholder="0" oninput="calcCusto()"></div>
@@ -988,16 +1001,16 @@ function frmProducao(){
     <button class="btn-save" onclick="saveProducao()"><i class="ti ti-check" style="font-size:14px"></i>Lançar produção</button>
   </div></div>`;
 }
-
+ 
 /* ===== ITEM ROWS ===== */
-function mpOpts(){return(DB.MateriaPrima||[]).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (${esc(m.Unidade||'')})</option>`).join('')}
-function prodOpts(){return(DB.Produtos||[]).map(p=>`<option value="${p.Cod}">${esc(p.Produto)}</option>`).join('')}
-
+function mpOpts(){return(DB.MateriaPrima||[]).slice().sort((a,b)=>(a.Item||"").localeCompare(b.Item||"","pt")).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (${esc(m.Unidade||'')})</option>`).join('')}
+function prodOpts(){return(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt")).map(p=>`<option value="${p.Cod}">${esc(p.Produto)}</option>`).join('')}
+ 
 function addItemCompra(){
   const l=document.getElementById('co-itens');if(!l)return;
   const d=document.createElement('div');d.className='item-dyn';
   d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
-    <select class="fi ci-ins"><option value="">Selecione o insumo...</option>${mpOpts()}</select></div>
+    <select class="fi ci-ins" onchange="onSelectInsumoCompra(this)"><option value="">Selecione o insumo...</option>${mpOpts()}</select></div>
   <div class="item-vals">
     <div><label class="fl">Quantidade</label><input class="fi ci-qtd" type="number" min="0" step="0.001" oninput="calcTotalC()"></div>
     <div><label class="fl">Valor unit. (R$)</label><input class="fi ci-vun" type="number" min="0" step="0.01" oninput="calcTotalC()"></div>
@@ -1005,12 +1018,12 @@ function addItemCompra(){
   </div>`;
   l.appendChild(d);
 }
-
+ 
 function calcTotalC(){
   let t=0;document.querySelectorAll('#co-itens .item-dyn').forEach(r=>{t+=Number(r.querySelector('.ci-qtd').value||0)*Number(r.querySelector('.ci-vun').value||0);});
   const el=document.getElementById('co-total');if(el)el.textContent='Total: '+fmt$(t);
 }
-
+ 
 function addItemVenda(){
   const l=document.getElementById('v-itens');if(!l)return;
   const d=document.createElement('div');d.className='item-dyn';
@@ -1023,25 +1036,25 @@ function addItemVenda(){
   </div>`;
   l.appendChild(d);
 }
-
+ 
 function calcTotalV(){
   let t=0;document.querySelectorAll('#v-itens .item-dyn').forEach(r=>{t+=Number(r.querySelector('.vi-qtd').value||0)*Number(r.querySelector('.vi-vun').value||0);});
   const el=document.getElementById('v-total');if(el)el.textContent='Total: '+fmt$(t);
 }
-
+ 
 function addItemReceita(){
   const l=document.getElementById('r-itens');if(!l)return;
   const d=document.createElement('div');d.className='item-dyn';
   d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
-    <select class="fi ri-ins" onchange="calcCustoRec()"><option value="">Selecione o insumo...</option>${mpOpts()}</select></div>
+    <select class="fi ri-ins" onchange="onSelectInsumoReceita(this)"><option value="">Selecione o insumo...</option>${mpOpts()}</select></div>
   <div class="item-vals">
     <div><label class="fl">Quantidade</label><input class="fi ri-qtd" type="number" min="0" step="0.001" oninput="calcCustoRec()"></div>
-    <div><label class="fl">Unidade</label><input class="fi ri-un" placeholder="kg, g, mL..."></div>
+    <div><label class="fl">Unidade</label><input class="fi ri-un" placeholder="—" readonly style="background:var(--surface-2);color:var(--text-muted)"></div>
     <button class="btn-rem" onclick="this.closest('.item-dyn').remove();calcCustoRec()" style="margin-bottom:3px"><i class="ti ti-trash" style="font-size:16px"></i></button>
   </div>`;
   l.appendChild(d);
 }
-
+ 
 function calcCustoRec(){
   let c=0;document.querySelectorAll('#r-itens .item-dyn').forEach(r=>{
     const cod=r.querySelector('.ri-ins').value;
@@ -1050,26 +1063,28 @@ function calcCustoRec(){
   });
   const el=document.getElementById('r-custo');if(el)el.textContent='Custo: '+fmt$(c);
 }
-
+ 
 function loadReceitaExistente(id){
   const l=document.getElementById('r-itens');if(!l)return;
   l.innerHTML='';if(!id)return;
   const eng=(DB.EngenhariaProduto||[]).filter(e=>String(e.CodProduto)===String(id));
   eng.forEach(e=>{
     const d=document.createElement('div');d.className='item-dyn';
+    const ins_l=(DB.MateriaPrima||[]).find(m=>String(m.Cod)===String(e.CodInsumo));
     d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
-      <select class="fi ri-ins" onchange="calcCustoRec()"><option value="">Selecione...</option>${mpOpts()}</select></div>
+      <select class="fi ri-ins" onchange="onSelectInsumoReceita(this)"><option value="">Selecione...</option>${mpOpts()}</select></div>
     <div class="item-vals">
       <div><label class="fl">Quantidade</label><input class="fi ri-qtd" type="number" min="0" step="0.001" value="${e.Quantidade||''}" oninput="calcCustoRec()"></div>
-      <div><label class="fl">Unidade</label><input class="fi ri-un" value="${esc(e.Unidade||'')}"></div>
+      <div><label class="fl">Unidade</label><input class="fi ri-un" value="${esc(ins_l?ins_l.Unidade||'':e.Unidade||'')}" readonly style="background:var(--surface-2);color:var(--text-muted)"></div>
       <button class="btn-rem" onclick="this.closest('.item-dyn').remove();calcCustoRec()" style="margin-bottom:3px"><i class="ti ti-trash" style="font-size:16px"></i></button>
     </div>`;
     l.appendChild(d);d.querySelector('.ri-ins').value=e.CodInsumo;
   });calcCustoRec();
 }
-
+ 
 function calcCusto(){
-  const cp=document.getElementById('f-pr-prod').value;
+  const f_pr_w=document.getElementById('f-pr-prod-wrap');
+  const cp=f_pr_w&&f_pr_w._getValue?f_pr_w._getValue():(document.getElementById('f-pr-prod')?document.getElementById('f-pr-prod').value:null);
   const qtd=Number(document.getElementById('f-pr-qtd').value||0);
   const wrap=document.getElementById('pr-custo');
   const sem=document.getElementById('pr-sem-rec');
@@ -1087,10 +1102,10 @@ function calcCusto(){
   if(wrap)wrap.innerHTML=`<div class="custo-box"><div class="custo-box-label">Custo estimado para ${qtd} unidade(s)</div>
     <div class="custo-valor">${fmt$(custo)}</div>${rows}</div>`;
 }
-
+ 
 function togglePgtoC(){const s=document.getElementById('f-co-st');const w=document.getElementById('f-co-dtpg-w');if(s&&w)w.style.display=s.value==='Pago'?'block':'none';}
 function togglePgtoV(){const s=document.getElementById('f-v-st');const w=document.getElementById('f-v-dtpg-w');if(s&&w)w.style.display=s.value==='Pago'?'block':'none';}
-
+ 
 /* ===== SAVES ===== */
 async function saveMP(){
   const item=document.getElementById('f-mp-item').value.trim();
@@ -1100,7 +1115,7 @@ async function saveMP(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Insumo salvo!');await loadAll();goMod('mp');
 }
-
+ 
 async function saveProduto(){
   const nome=document.getElementById('f-p-nome').value.trim();
   if(!nome){toast('Informe o nome do produto','e');return;}
@@ -1109,7 +1124,7 @@ async function saveProduto(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Produto salvo!');await loadAll();goMod('produtos');
 }
-
+ 
 async function saveCliente(){
   const nome=document.getElementById('f-c-nome').value.trim();
   if(!nome){toast('Informe o nome do cliente','e');return;}
@@ -1118,7 +1133,7 @@ async function saveCliente(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Cliente salvo!');await loadAll();goMod('clientes');
 }
-
+ 
 async function saveFornecedor(){
   const nome=document.getElementById('f-f-nome').value.trim();
   if(!nome){toast('Informe o nome','e');return;}
@@ -1127,7 +1142,7 @@ async function saveFornecedor(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Fornecedor salvo!');await loadAll();goMod('fornecedores');
 }
-
+ 
 async function saveCompra(){
   const forn=document.getElementById('f-co-forn').value;
   const dt=document.getElementById('f-co-dt').value;
@@ -1149,7 +1164,7 @@ async function saveCompra(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Compra salva!');await loadAll();goMod('compras');
 }
-
+ 
 async function saveVenda(){
   const cli=document.getElementById('f-v-cli').value;
   const dt=document.getElementById('f-v-dt').value;
@@ -1170,9 +1185,10 @@ async function saveVenda(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Venda salva!');await loadAll();goMod('vendas');
 }
-
+ 
 async function saveReceita(){
-  const cp=document.getElementById('f-r-prod').value;
+  const f_r_wrap=document.getElementById('f-r-prod-wrap');
+  const cp=f_r_wrap&&f_r_wrap._getValue?f_r_wrap._getValue():(document.getElementById('f-r-prod')?document.getElementById('f-r-prod').value:null);
   if(!cp){toast('Selecione o produto','e');return;}
   const rows=document.querySelectorAll('#r-itens .item-dyn');
   if(!rows.length){toast('Adicione pelo menos 1 insumo','e');return;}
@@ -1188,9 +1204,10 @@ async function saveReceita(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Receita salva!');await loadAll();goMod('receitas');
 }
-
+ 
 async function saveProducao(){
-  const cp=document.getElementById('f-pr-prod').value;
+  const f_pr_wrap=document.getElementById('f-pr-prod-wrap');
+  const cp=f_pr_wrap&&f_pr_wrap._getValue?f_pr_wrap._getValue():(document.getElementById('f-pr-prod')?document.getElementById('f-pr-prod').value:null);
   const qtd=document.getElementById('f-pr-qtd').value;
   const dt=document.getElementById('f-pr-dt').value;
   if(!cp||!qtd||!dt){toast('Preencha produto, quantidade e data','e');return;}
@@ -1198,7 +1215,7 @@ async function saveProducao(){
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Produção lançada! Custo: '+fmt$(r.custoTotal));await loadAll();goMod('producao');
 }
-
+ 
 async function del(sheet,cod,mod){
   if(!confirm('Excluir este registro? Esta ação não pode ser desfeita.'))return;
   const r=await api({action:'delete',sheet,cod});
@@ -1207,7 +1224,7 @@ async function del(sheet,cod,mod){
   document.getElementById('list-body').innerHTML=renderListItems(mod,'');
   const si=document.getElementById('search-input');if(si)si.value='';
 }
-
+ 
 function openEntregas(codVenda){
   const itens=(DB.VendasItens||[]).filter(i=>String(i.CodVenda)===String(codVenda));
   const prods=DB.Produtos||[];
@@ -1230,15 +1247,15 @@ function openEntregas(codVenda){
   ov.onclick=e=>{if(e.target===ov)ov.remove();};
   document.body.appendChild(ov);
 }
-
+ 
 async function toggleEntrega(codVenda,codProduto,checked){
   const r=await api({action:'updateEntregaItem',data:{CodVenda:codVenda,CodProduto:codProduto,Entregue:checked?'Sim':'Não'}});
   if(r.error){toast('Erro ao atualizar','e');return;}
   toast('Entrega atualizada');await loadAll();
   document.getElementById('list-body').innerHTML=renderListItems('vendas','');
 }
-
-
+ 
+ 
 // ===== PERSONALIZADOS =====
 function renderPersonalizados(c){
   const pers=DB.Personalizados||[];
@@ -1246,14 +1263,14 @@ function renderPersonalizados(c){
   const mp=DB.MateriaPrima||[];
   const ci=DB.ComprasItens||[];
   const comp=DB.Compras||[];
-
+ 
   function lastPrice(codInsumo){
     const found=(ci||[]).filter(i=>String(i.CodInsumo)===String(codInsumo));
     if(!found.length)return 0;
     return found.map(i=>{const c2=comp.find(x=>String(x.Cod)===String(i.CodCompra));return{v:Number(i.ValorUnitario||0),d:c2?c2.DataEntrada:''};})
       .sort((a,b)=>b.d.localeCompare(a.d))[0].v;
   }
-
+ 
   const cardsHTML=pers.length===0
     ?`<div class="empty-list"><i class="ti ti-star" style="font-size:36px;opacity:.2"></i><p>Nenhum produto personalizado cadastrado.</p></div>`
     :pers.map(p=>{
@@ -1289,7 +1306,7 @@ function renderPersonalizados(c){
           ${p.Observacao?`<div class="pers-card-obs">${esc(p.Observacao)}</div>`:''}
         </div>`;
       }).join('');
-
+ 
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">Personalizados</div>
@@ -1301,8 +1318,8 @@ function renderPersonalizados(c){
     <div class="pers-body" id="pers-body">${cardsHTML}</div>
   </div>`;
 }
-
-
+ 
+ 
 function filtrarCalc(){
   const q=(document.getElementById('calc-busca')?.value||'').toLowerCase();
   const gr=(document.getElementById('calc-grupo')?.value||'').toLowerCase();
@@ -1324,17 +1341,17 @@ function filtrarCalc(){
         <input type="number" class="receita-sel-qtd" id="calc-qtd-${p.Cod}" value="1" min="1" disabled>
       </div>`).join('');
 }
-
-
+ 
+ 
 // ===== CUSTOS EXTRAS =====
 // Armazenados localmente (sem nova aba no Sheets por ora)
 // Estrutura: [{id, nome, tipo:'fixo'|'percentual', valor}]
 let custosExtras = JSON.parse(localStorage.getItem('lumo_custos_extras')||'[]');
-
+ 
 function salvarCustosExtras(){
   localStorage.setItem('lumo_custos_extras', JSON.stringify(custosExtras));
 }
-
+ 
 function renderCustosExtras(c){
   const rows = custosExtras.map((ce,i)=>`
     <div class="list-item">
@@ -1347,7 +1364,7 @@ function renderCustosExtras(c){
         <button class="bi" data-action="del-ce" data-idx="${i}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div>
     </div>`).join('');
-
+ 
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <button class="btn-back" onclick="goMod('receitas')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
@@ -1362,7 +1379,7 @@ function renderCustosExtras(c){
     </div>
   </div>`;
 }
-
+ 
 function abrirFormCustoExtra(idx){
   const ce = idx!==null ? custosExtras[idx] : null;
   const c=document.getElementById('main-content');
@@ -1396,13 +1413,13 @@ function abrirFormCustoExtra(idx){
   </div>`;
   toggleCETipo();
 }
-
+ 
 function toggleCETipo(){
   const tipo=document.getElementById('ce-tipo')?.value;
   const lbl=document.getElementById('ce-val-label');
   if(lbl)lbl.textContent=tipo==='percentual'?'Percentual (%)':'Valor (R$ por unidade)';
 }
-
+ 
 function saveCustoExtra(idx){
   const nome=document.getElementById('ce-nome').value.trim();
   const tipo=document.getElementById('ce-tipo').value;
@@ -1418,7 +1435,7 @@ function saveCustoExtra(idx){
   toast('Custo extra salvo!');
   renderCustosExtras(document.getElementById('main-content'));
 }
-
+ 
 function editCustoExtra(idx){ abrirFormCustoExtra(idx); }
 function delCustoExtra(idx){
   if(!confirm('Excluir este custo extra?'))return;
@@ -1427,7 +1444,7 @@ function delCustoExtra(idx){
   toast('Excluído');
   renderCustosExtras(document.getElementById('main-content'));
 }
-
+ 
 function calcCustoComExtras(custoBase){
   let total=custoBase;
   custosExtras.forEach(ce=>{
@@ -1436,7 +1453,7 @@ function calcCustoComExtras(custoBase){
   });
   return total;
 }
-
+ 
 function filtrarPers(q){
   q=q.toLowerCase().trim();
   const body=document.getElementById('pers-body');if(!body)return;
@@ -1447,7 +1464,7 @@ function filtrarPers(q){
   body.innerHTML=frag.querySelector('#pers-body')?frag.querySelector('#pers-body').innerHTML:body.innerHTML;
   DB.Personalizados=bak;
 }
-
+ 
 let persEditId=null;
 function openFormPers(id){
   persEditId=id?String(id):null;
@@ -1495,16 +1512,16 @@ function openFormPers(id){
     calcCustoPers();
   }
 }
-
+ 
 function mpOptsPers(){
   return(DB.MateriaPrima||[]).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (${esc(m.Unidade||'')})</option>`).join('');
 }
-
+ 
 function addItemPers(){
   const l=document.getElementById('pf-itens');if(!l)return;
   const d=document.createElement('div');d.className='item-dyn';
   d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
-    <select class="fi pfi-ins" onchange="calcCustoPers()"><option value="">Selecione...</option>${mpOptsPers()}</select></div>
+    <select class="fi pfi-ins" onchange="onSelectInsumoPers(this)"><option value="">Selecione...</option>${mpOptsPers()}</select></div>
   <div class="item-vals">
     <div><label class="fl">Quantidade</label><input class="fi pfi-qtd" type="number" min="0" step="0.001" oninput="calcCustoPers()"></div>
     <div><label class="fl">Unidade</label><input class="fi pfi-un" placeholder="kg, g, mL..."></div>
@@ -1512,7 +1529,7 @@ function addItemPers(){
   </div>`;
   l.appendChild(d);
 }
-
+ 
 function calcCustoPers(){
   const ci=DB.ComprasItens||[];const comp=DB.Compras||[];
   function lp(cod){
@@ -1530,7 +1547,7 @@ function calcCustoPers(){
   const el=document.getElementById('pf-custo');
   if(el)el.textContent='Custo: '+fmt$(custo);
 }
-
+ 
 async function savePers(){
   const nome=document.getElementById('pf-nome').value.trim();
   const cli=document.getElementById('pf-cli').value;
@@ -1554,14 +1571,14 @@ async function savePers(){
   toast(persEditId?'Personalizado atualizado!':'Personalizado salvo!');
   await loadAll();goMod('personalizados');
 }
-
+ 
 async function delPers(cod){
   if(!confirm('Excluir este personalizado?'))return;
   const r=await api({action:'deletePersonalizado',cod:String(cod)});
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Excluído');await loadAll();goMod('personalizados');
 }
-
+ 
 // ===== CALCULADORA DE LOTE =====
 function renderCalculadora(c){
   const eng=DB.EngenhariaProduto||[];
@@ -1608,14 +1625,14 @@ function renderCalculadora(c){
     </div>
   </div>`;
 }
-
+ 
 function toggleCalcRow(codProd){
   const chk=document.getElementById('calc-chk-'+codProd);
   const qtd=document.getElementById('calc-qtd-'+codProd);
   if(qtd)qtd.disabled=!chk.checked;
   if(chk.checked&&qtd)qtd.focus();
 }
-
+ 
 function selecionarTodosCalc(sel){
   (DB.Produtos||[]).filter(p=>(DB.EngenhariaProduto||[]).some(e=>String(e.CodProduto)===String(p.Cod))).forEach(p=>{
     const chk=document.getElementById('calc-chk-'+p.Cod);
@@ -1623,35 +1640,35 @@ function selecionarTodosCalc(sel){
     if(chk){chk.checked=sel;if(qtd)qtd.disabled=!sel;}
   });
 }
-
+ 
 function fmtQtd(v){
   const n=Number(v||0);
   return Number.isInteger(n)?n.toString():parseFloat(n.toFixed(4)).toString();
 }
-
+ 
 function calcularLote(){
   const eng=DB.EngenhariaProduto||[];
   const prods=DB.Produtos||[];
   const mp=DB.MateriaPrima||[];
-
+ 
   const selecionados=prods.filter(p=>{
     const chk=document.getElementById('calc-chk-'+p.Cod);
     return chk&&chk.checked;
   }).map(p=>({prod:p,qtd:Number(document.getElementById('calc-qtd-'+p.Cod).value||1)}));
-
+ 
   if(!selecionados.length){toast('Selecione pelo menos um produto','e');return;}
-
+ 
   const result=document.getElementById('calc-result');
   result.className='calc-result show';
   const totalInsumos={};
-
+ 
   const blocosHTML=selecionados.map(({prod,qtd})=>{
     const receita=eng.filter(e=>String(e.CodProduto)===String(prod.Cod));
     if(!receita.length)return`<div class="calc-rec-bloco">
       <div class="calc-rec-hdr"><span class="calc-rec-nome">${esc(prod.Produto)}</span><span class="calc-rec-qtd">${qtd} un</span></div>
       <div style="padding:12px 16px;font-size:13px;color:var(--text-muted)">Sem receita cadastrada.</div>
     </div>`;
-
+ 
     const itensHTML=receita.map(e=>{
       const ins=mp.find(m=>String(m.Cod)===String(e.CodInsumo));
       const qtdNec=Number(e.Quantidade||0)*qtd;
@@ -1665,7 +1682,7 @@ function calcularLote(){
         <span class="calc-rec-item-qtd">${fmtQtd(qtdNec)} ${esc(uni)}</span>
       </div>`;
     }).join('');
-
+ 
     return`<div class="calc-rec-bloco">
       <div class="calc-rec-hdr">
         <span class="calc-rec-nome">${esc(prod.Produto)}</span>
@@ -1673,7 +1690,7 @@ function calcularLote(){
       </div>${itensHTML}
     </div>`;
   }).join('');
-
+ 
   const totalHTML=Object.entries(totalInsumos)
     .sort((a,b)=>a[1].nome.localeCompare(b[1].nome))
     .map(([k,v])=>{
@@ -1686,7 +1703,7 @@ function calcularLote(){
         </div>
       </div>`;
     }).join('');
-
+ 
   const totalVelas=selecionados.reduce((s,x)=>s+x.qtd,0);
   result.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
@@ -1697,9 +1714,9 @@ function calcularLote(){
     <div class="fin-sec" style="margin-top:20px;margin-bottom:12px">Resumo total de insumos</div>
     <div class="calc-total-bloco">${totalHTML||'<div class="calc-empty">Sem insumos.</div>'}</div>`;
 }
-
+ 
 // Init
-
+ 
 // ===== RELATÓRIO DO CLIENTE =====
 let relCliId=null;
 function abrirRelCliente(cod){
@@ -1769,7 +1786,167 @@ function renderRelCliente(c){
     </div>
   </div>`;
 }
-
+ 
+ 
+// ===== SELECT COM BUSCA =====
+function criarSelectBusca(containerId, opcoes, placeholder, onSelect){
+  // opcoes = [{value, label}]
+  const wrap = document.getElementById(containerId);
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  wrap.className = 'sel-busca-wrap fg';
+  
+  let valorSelecionado = null;
+  
+  const input = document.createElement('input');
+  input.className = 'sel-busca-input fi';
+  input.placeholder = placeholder || 'Buscar...';
+  input.autocomplete = 'off';
+  
+  const list = document.createElement('div');
+  list.className = 'sel-busca-list';
+  
+  function renderOpts(filtro){
+    const q = (filtro||'').toLowerCase();
+    const filtradas = q ? opcoes.filter(o=>o.label.toLowerCase().includes(q)) : opcoes;
+    list.innerHTML = filtradas.length === 0
+      ? '<div class="sel-busca-empty">Nenhum resultado</div>'
+      : filtradas.map(o=>`<div class="sel-busca-opt${valorSelecionado===o.value?' selected':''}" data-value="${o.value}" data-label="${esc(o.label)}">${esc(o.label)}</div>`).join('');
+  }
+  
+  input.addEventListener('focus', ()=>{ renderOpts(input.value); list.classList.add('show'); });
+  input.addEventListener('input', ()=>{ valorSelecionado=null; renderOpts(input.value); list.classList.add('show'); if(onSelect)onSelect(null); });
+  input.addEventListener('blur', ()=>{ setTimeout(()=>list.classList.remove('show'),200); });
+  
+  list.addEventListener('mousedown', e=>{
+    const opt = e.target.closest('.sel-busca-opt');
+    if(!opt) return;
+    valorSelecionado = opt.dataset.value;
+    input.value = opt.dataset.label;
+    list.classList.remove('show');
+    renderOpts('');
+    if(onSelect) onSelect(valorSelecionado);
+  });
+  
+  wrap.appendChild(input);
+  wrap.appendChild(list);
+  renderOpts('');
+  
+  // API para ler o valor selecionado
+  wrap._getValue = ()=>valorSelecionado;
+  wrap._setValue = (val)=>{
+    const o = opcoes.find(x=>String(x.value)===String(val));
+    if(o){ valorSelecionado=o.value; input.value=o.label; }
+  };
+}
+ 
+function mpOptsArray(){
+  return (DB.MateriaPrima||[]).slice()
+    .sort((a,b)=>(a.Item||'').localeCompare(b.Item||'','pt'))
+    .map(m=>({value:String(m.Cod),label:m.Item+(m.Unidade?' ('+m.Unidade+')':'')}));
+}
+function prodOptsArray(){
+  return (DB.Produtos||[]).slice()
+    .sort((a,b)=>(a.Produto||'').localeCompare(b.Produto||'','pt'))
+    .map(p=>({value:String(p.Cod),label:p.Produto}));
+}
+ 
+ 
+function duplicarReceita(codOrigem){
+  const prods = DB.Produtos||[];
+  const eng   = DB.EngenhariaProduto||[];
+  const prodOrigem = prods.find(p=>String(p.Cod)===String(codOrigem));
+  const nomeOrigem = prodOrigem ? prodOrigem.Produto : 'Produto '+codOrigem;
+  const itensOrigem = eng.filter(e=>String(e.CodProduto)===String(codOrigem));
+ 
+  if(!itensOrigem.length){
+    toast('Esta receita não tem insumos cadastrados','e');
+    return;
+  }
+ 
+  // Abre o formulário de nova receita já pré-preenchido com os insumos da original
+  const c = document.getElementById('main-content');
+  editId = null;
+  c.innerHTML = frmReceita(null);
+ 
+  // Inicializa o select com busca de produto
+  criarSelectBusca('f-r-prod-wrap', prodOptsArray(), 'Buscar produto...', (val)=>{
+    if(val) loadReceitaExistente(val);
+    else{ document.getElementById('r-itens').innerHTML=''; document.getElementById('r-custo').textContent='Custo: R$ 0,00'; }
+  });
+ 
+  // Carrega os insumos da receita original
+  const l = document.getElementById('r-itens');
+  l.innerHTML = '';
+  itensOrigem.forEach(e=>{
+    const ins = (DB.MateriaPrima||[]).find(m=>String(m.Cod)===String(e.CodInsumo));
+    const d = document.createElement('div'); d.className='item-dyn';
+    d.innerHTML=`<div class="item-sel fg" style="margin:0"><label class="fl">Insumo</label>
+      <select class="fi ri-ins" onchange="onSelectInsumoReceita(this)"><option value="">Selecione...</option>${mpOpts()}</select></div>
+    <div class="item-vals">
+      <div><label class="fl">Quantidade</label><input class="fi ri-qtd" type="number" min="0" step="0.001" value="${e.Quantidade||''}" oninput="calcCustoRec()"></div>
+      <div><label class="fl">Unidade</label><input class="fi ri-un" value="${esc(ins?ins.Unidade||'':e.Unidade||'')}" readonly style="background:var(--surface-2);color:var(--text-muted)"></div>
+      <button class="btn-rem" onclick="this.closest('.item-dyn').remove();calcCustoRec()" style="margin-bottom:3px"><i class="ti ti-trash" style="font-size:16px"></i></button>
+    </div>`;
+    l.appendChild(d);
+    d.querySelector('.ri-ins').value = e.CodInsumo;
+  });
+  calcCustoRec();
+ 
+  toast('Receita duplicada de "'+nomeOrigem+'" — selecione o produto destino e ajuste o que precisar');
+}
+ 
+ 
+function onSelectInsumoReceita(sel){
+  const cod = sel.value;
+  const row = sel.closest('.item-dyn');
+  const unInput = row ? row.querySelector('.ri-un') : null;
+  if(unInput && cod){
+    const ins = (DB.MateriaPrima||[]).find(m=>String(m.Cod)===String(cod));
+    if(ins && ins.Unidade){ unInput.value = ins.Unidade; }
+  }
+  calcCustoRec();
+}
+ 
+function onSelectInsumoCompra(sel){
+  const cod = sel.value;
+  const row = sel.closest('.item-dyn');
+  // Compras não têm campo unidade visível mas guardamos internamente
+  // Adiciona campo oculto para unidade
+  if(cod && row){
+    let unHid = row.querySelector('.ci-un-hid');
+    if(!unHid){
+      unHid = document.createElement('input');
+      unHid.type = 'hidden';
+      unHid.className = 'ci-un-hid';
+      row.appendChild(unHid);
+    }
+    const ins = (DB.MateriaPrima||[]).find(m=>String(m.Cod)===String(cod));
+    if(ins && ins.Unidade){ unHid.value = ins.Unidade; }
+    // Mostra a unidade como label informativo
+    let unLabel = row.querySelector('.ci-un-label');
+    if(!unLabel){
+      unLabel = document.createElement('div');
+      unLabel.className = 'ci-un-label';
+      unLabel.style.cssText = 'font-size:11px;color:var(--text-muted);margin-top:3px;padding-left:2px';
+      const selWrap = row.querySelector('.item-sel');
+      if(selWrap) selWrap.appendChild(unLabel);
+    }
+    unLabel.textContent = ins && ins.Unidade ? 'Unidade: '+ins.Unidade : '';
+  }
+}
+ 
+function onSelectInsumoPers(sel){
+  const cod = sel.value;
+  const row = sel.closest('.item-dyn');
+  const unInput = row ? row.querySelector('.pfi-un') : null;
+  if(unInput && cod){
+    const ins = (DB.MateriaPrima||[]).find(m=>String(m.Cod)===String(cod));
+    if(ins && ins.Unidade){ unInput.value = ins.Unidade; }
+  }
+  calcCustoPers();
+}
+ 
 // ===== HISTÓRICO DE COMPRAS POR INSUMO =====
 let relMPId=null;
 function abrirRelMP(cod){
@@ -1850,7 +2027,7 @@ function renderRelMP(c){
     </div>
   </div>`;
 }
-
+ 
 // ===== DETALHE DE COMPRA =====
 function abrirDetalheCompra(codCompra){
   const c=document.getElementById('main-content');
@@ -1893,7 +2070,7 @@ function abrirDetalheCompra(codCompra){
     </div>
   </div>`;
 }
-
+ 
 // ===== PAINEL FINANCEIRO =====
 function renderFinanceiro(){
   const hoje=new Date(),mes=hoje.toISOString().slice(0,7);
@@ -1995,9 +2172,10 @@ function calcFinanceiro(){
     <div class="fin-sec">Vendas — ${periodoLabel}</div>${detV}
     <div class="fin-sec">Compras — ${periodoLabel}</div>${detC}`;
 }
-
+ 
 if(URL_API){loadAll().then(ok=>{if(ok)render();else render();});}
 else{render();}
 </script>
 </body>
 </html>
+ 
