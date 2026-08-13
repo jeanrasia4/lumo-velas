@@ -381,6 +381,27 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .sel-busca-opt:hover,.sel-busca-opt.selected{background:var(--bg-accent);color:var(--text-accent)}
 .sel-busca-empty{padding:9px 12px;font-size:13px;color:var(--text-muted);font-style:italic}
  
+ 
+/* CHECKLIST FEIRA */
+.feira-body{padding:18px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.feira-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);transition:all .15s}
+.feira-item.done{background:var(--bg-success);border-color:var(--border-success);opacity:.7}
+.feira-item input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold);cursor:pointer;flex-shrink:0}
+.feira-item-text{flex:1;font-size:14px;cursor:pointer;user-select:none}
+.feira-item.done .feira-item-text{text-decoration:line-through;color:var(--text-muted)}
+.feira-item-del{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center}
+.feira-item-del:hover{color:var(--text-danger)}
+.feira-add-row{display:flex;gap:8px}
+.feira-add-input{flex:1;padding:10px 12px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:14px;background:var(--surface);color:var(--text-primary)}
+.feira-add-input:focus{outline:none;border-color:var(--gold)}
+.btn-feira-add{padding:10px 16px;background:var(--fill-accent);color:var(--on-accent);border:none;border-radius:var(--radius);font-size:13px;cursor:pointer;white-space:nowrap}
+.feira-toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.btn-feira-sec{padding:7px 14px;background:none;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:12px;cursor:pointer;color:var(--text-secondary);display:flex;align-items:center;gap:5px}
+.btn-feira-sec:hover{background:var(--surface-2)}
+.feira-progress{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.feira-progress-bar{height:100%;background:var(--fill-accent);border-radius:2px;transition:width .3s}
+.feira-stats{font-size:12px;color:var(--text-muted)}
+ 
 /* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--radius);font-size:13px;z-index:300;display:none;align-items:center;gap:8px;white-space:nowrap;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md)}
 .toast.on{display:flex}
@@ -428,6 +449,11 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
       <button class="nb" onclick="goMod('personalizados')" data-mod="personalizados"><i class="ti ti-star"></i>Personalizados</button>
       <button class="nb" onclick="goMod('calculadora')" data-mod="calculadora"><i class="ti ti-calculator"></i>Calculadora</button>
     </div>
+    <!-- Linha 4: Feira -->
+    <div class="nav-row">
+      <span class="nav-group-label">Feira</span>
+      <button class="nb" onclick="goMod('feira')" data-mod="feira"><i class="ti ti-checkbox"></i>Checklist Feira</button>
+    </div>
   </div>
  
   <div id="main-content"></div>
@@ -467,7 +493,7 @@ document.addEventListener('click', function(e){
 let currentMod='dashboard';
 let editId=null;
  
-const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote'};
+const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote',feira:'Checklist Feira'};
  
 function fmt$(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function fmtD(d){if(!d)return'';try{const p=String(d).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d}catch(e){return d}}
@@ -527,6 +553,7 @@ function render(){
   if(currentMod==='relmp'){renderRelMP(c);return;}
   if(currentMod==='personalizados'){renderPersonalizados(c);return;}
   if(currentMod==='calculadora'){renderCalculadora(c);return;}
+  if(currentMod==='feira'){renderFeira(c);return;}
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">${LABELS[currentMod]}</div>
@@ -783,8 +810,19 @@ function openForm(mod,id){
     case 'fornecedores': c.innerHTML=frmFornecedor(id);break;
     case 'compras': c.innerHTML=frmCompra();addItemCompra();break;
     case 'vendas': c.innerHTML=frmVenda();addItemVenda();break;
-    case 'receitas': c.innerHTML=frmReceita(id);if(id)loadReceitaExistente(id);break;
-    case 'producao': c.innerHTML=frmProducao();document.getElementById('f-pr-dt').value=today();break;
+    case 'receitas':
+      c.innerHTML=frmReceita(id);
+      criarSelectBusca('f-r-prod-wrap', prodOptsArray(), 'Digite para buscar produto...', function(val){
+        if(val) loadReceitaExistente(val);
+        else{ document.getElementById('r-itens').innerHTML=''; document.getElementById('r-custo').textContent='Custo: R$ 0,00'; }
+      });
+      if(id){ setTimeout(function(){ var w=document.getElementById('f-r-prod-wrap'); if(w&&w._setValue){w._setValue(id);} loadReceitaExistente(id); },80); }
+      break;
+    case 'producao':
+      c.innerHTML=frmProducao();
+      document.getElementById('f-pr-dt').value=today();
+      criarSelectBusca('f-pr-prod-wrap', prodOptsArray(), 'Digite para buscar produto...', function(){ calcCusto(); });
+      break;
   }
   togglePgtoC();togglePgtoV();
 }
@@ -1084,7 +1122,7 @@ function loadReceitaExistente(id){
  
 function calcCusto(){
   const f_pr_w=document.getElementById('f-pr-prod-wrap');
-  const cp=f_pr_w&&f_pr_w._getValue?f_pr_w._getValue():(document.getElementById('f-pr-prod')?document.getElementById('f-pr-prod').value:null);
+  const cp=f_pr_w&&f_pr_w._getValue?f_pr_w._getValue():null;
   const qtd=Number(document.getElementById('f-pr-qtd').value||0);
   const wrap=document.getElementById('pr-custo');
   const sem=document.getElementById('pr-sem-rec');
@@ -1108,42 +1146,47 @@ function togglePgtoV(){const s=document.getElementById('f-v-st');const w=documen
  
 /* ===== SAVES ===== */
 async function saveMP(){
+  lockBtn('.btn-save','Salvando...');
   const item=document.getElementById('f-mp-item').value.trim();
   if(!item){toast('Informe o nome do insumo','e');return;}
   const data={Item:item,Unidade:document.getElementById('f-mp-un').value,Grupo:document.getElementById('f-mp-gr').value,EstoqueMinimo:document.getElementById('f-mp-em').value||0};
   const r=editId?await api({action:'update',sheet:'MateriaPrima',cod:editId,data}):await api({action:'create',sheet:'MateriaPrima',data});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Insumo salvo!');await loadAll();goMod('mp');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Insumo salvo!');unlockBtn('.btn-save');await loadAll();goMod('mp');
 }
  
 async function saveProduto(){
+  lockBtn('.btn-save','Salvando...');
   const nome=document.getElementById('f-p-nome').value.trim();
   if(!nome){toast('Informe o nome do produto','e');return;}
   const data={Produto:nome,Grupo:document.getElementById('f-p-gr').value,Colecao:document.getElementById('f-p-col').value,DataLancamento:document.getElementById('f-p-dt').value,PesoTotal:document.getElementById('f-p-peso').value||0,Tamanho:document.getElementById('f-p-tam').value,EstoqueMinimo:document.getElementById('f-p-em').value||0};
   const r=editId?await api({action:'update',sheet:'Produtos',cod:editId,data}):await api({action:'create',sheet:'Produtos',data});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Produto salvo!');await loadAll();goMod('produtos');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Produto salvo!');unlockBtn('.btn-save');await loadAll();goMod('produtos');
 }
  
 async function saveCliente(){
+  lockBtn('.btn-save','Salvando...');
   const nome=document.getElementById('f-c-nome').value.trim();
   if(!nome){toast('Informe o nome do cliente','e');return;}
   const data={Nome:nome,Cidade:document.getElementById('f-c-cid').value,Whats:document.getElementById('f-c-wa').value,Insta:document.getElementById('f-c-ig').value,Classificacao:document.getElementById('f-c-cl').value,Observacao:document.getElementById('f-c-obs').value};
   const r=editId?await api({action:'update',sheet:'Cliente',cod:editId,data}):await api({action:'create',sheet:'Cliente',data});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Cliente salvo!');await loadAll();goMod('clientes');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Cliente salvo!');unlockBtn('.btn-save');await loadAll();goMod('clientes');
 }
  
 async function saveFornecedor(){
+  lockBtn('.btn-save','Salvando...');
   const nome=document.getElementById('f-f-nome').value.trim();
   if(!nome){toast('Informe o nome','e');return;}
   const data={Fornecedor:nome,Telefone:document.getElementById('f-f-tel').value,Cidade:document.getElementById('f-f-cid').value,Email:document.getElementById('f-f-email').value,Site:document.getElementById('f-f-site').value,CNPJ:document.getElementById('f-f-cnpj').value};
   const r=editId?await api({action:'update',sheet:'Fornecedor',cod:editId,data}):await api({action:'create',sheet:'Fornecedor',data});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Fornecedor salvo!');await loadAll();goMod('fornecedores');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Fornecedor salvo!');unlockBtn('.btn-save');await loadAll();goMod('fornecedores');
 }
  
 async function saveCompra(){
+  lockBtn('.btn-save','Salvando...');
   const forn=document.getElementById('f-co-forn').value;
   const dt=document.getElementById('f-co-dt').value;
   if(!forn||!dt){toast('Informe fornecedor e data','e');return;}
@@ -1161,11 +1204,12 @@ async function saveCompra(){
   if(!ok){toast('Preencha todos os campos dos itens','e');return;}
   const st=document.getElementById('f-co-st').value;
   const r=await api({action:'createCompraCompleta',data:{Fornecedor:forn,NF:document.getElementById('f-co-nf').value,DataEntrada:dt,StatusPagamento:st,DataPagamento:st==='Pago'?document.getElementById('f-co-dtpg').value:'',itens}});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Compra salva!');await loadAll();goMod('compras');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Compra salva!');unlockBtn('.btn-save');await loadAll();goMod('compras');
 }
  
 async function saveVenda(){
+  lockBtn('.btn-save','Salvando...');
   const cli=document.getElementById('f-v-cli').value;
   const dt=document.getElementById('f-v-dt').value;
   if(!cli||!dt){toast('Informe cliente e data','e');return;}
@@ -1182,14 +1226,15 @@ async function saveVenda(){
   if(!ok){toast('Preencha todos os campos dos itens','e');return;}
   const st=document.getElementById('f-v-st').value;
   const r=await api({action:'createVendaCompleta',data:{CodCliente:cli,DataVenda:dt,FormaPagamento:document.getElementById('f-v-forma').value,StatusPagamento:st,DataPagamento:st==='Pago'?document.getElementById('f-v-dtpg').value:'',Vendedor:document.getElementById('f-v-vend').value,Observacao:document.getElementById('f-v-obs').value,itens}});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Venda salva!');await loadAll();goMod('vendas');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Venda salva!');unlockBtn('.btn-save');await loadAll();goMod('vendas');
 }
  
 async function saveReceita(){
+  lockBtn('.btn-save','Salvando...');
   const f_r_wrap=document.getElementById('f-r-prod-wrap');
-  const cp=f_r_wrap&&f_r_wrap._getValue?f_r_wrap._getValue():(document.getElementById('f-r-prod')?document.getElementById('f-r-prod').value:null);
-  if(!cp){toast('Selecione o produto','e');return;}
+  const cp=f_r_wrap&&f_r_wrap._getValue?f_r_wrap._getValue():null;
+  if(!cp){toast('Selecione o produto na caixa de busca acima','e');return;}
   const rows=document.querySelectorAll('#r-itens .item-dyn');
   if(!rows.length){toast('Adicione pelo menos 1 insumo','e');return;}
   const itens=[];let ok=true;
@@ -1201,25 +1246,26 @@ async function saveReceita(){
   });
   if(!ok){toast('Preencha insumo e quantidade','e');return;}
   const r=await api({action:'setEngenharia',data:{CodProduto:cp,itens}});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Receita salva!');await loadAll();goMod('receitas');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Receita salva!');unlockBtn('.btn-save');await loadAll();goMod('receitas');
 }
  
 async function saveProducao(){
+  lockBtn('.btn-save','Lançando...');
   const f_pr_wrap=document.getElementById('f-pr-prod-wrap');
-  const cp=f_pr_wrap&&f_pr_wrap._getValue?f_pr_wrap._getValue():(document.getElementById('f-pr-prod')?document.getElementById('f-pr-prod').value:null);
+  const cp=f_pr_wrap&&f_pr_wrap._getValue?f_pr_wrap._getValue():null;
   const qtd=document.getElementById('f-pr-qtd').value;
   const dt=document.getElementById('f-pr-dt').value;
   if(!cp||!qtd||!dt){toast('Preencha produto, quantidade e data','e');return;}
   const r=await api({action:'createProducao',data:{CodProduto:cp,Quantidade:qtd,DataProducao:dt}});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Produção lançada! Custo: '+fmt$(r.custoTotal));await loadAll();goMod('producao');
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
+  toast('Produção lançada! Custo: '+fmt$(r.custoTotal));unlockBtn('.btn-save');await loadAll();goMod('producao');
 }
  
 async function del(sheet,cod,mod){
   if(!confirm('Excluir este registro? Esta ação não pode ser desfeita.'))return;
   const r=await api({action:'delete',sheet,cod});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
   toast('Registro excluído');await loadAll();
   document.getElementById('list-body').innerHTML=renderListItems(mod,'');
   const si=document.getElementById('search-input');if(si)si.value='';
@@ -1549,6 +1595,7 @@ function calcCustoPers(){
 }
  
 async function savePers(){
+  lockBtn('.btn-save','Salvando...');
   const nome=document.getElementById('pf-nome').value.trim();
   const cli=document.getElementById('pf-cli').value;
   if(!nome||!cli){toast('Informe nome e cliente','e');return;}
@@ -1567,7 +1614,7 @@ async function savePers(){
   const r=persEditId
     ?await api({action:'updatePersonalizado',data:{...data,Cod:persEditId,itens}})
     :await api({action:'createPersonalizado',data:{...data,itens}});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
   toast(persEditId?'Personalizado atualizado!':'Personalizado salvo!');
   await loadAll();goMod('personalizados');
 }
@@ -1575,7 +1622,7 @@ async function savePers(){
 async function delPers(cod){
   if(!confirm('Excluir este personalizado?'))return;
   const r=await api({action:'deletePersonalizado',cod:String(cod)});
-  if(r.error){toast('Erro: '+r.error,'e');return;}
+  if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
   toast('Excluído');await loadAll();goMod('personalizados');
 }
  
@@ -1790,53 +1837,81 @@ function renderRelCliente(c){
  
 // ===== SELECT COM BUSCA =====
 function criarSelectBusca(containerId, opcoes, placeholder, onSelect){
-  // opcoes = [{value, label}]
   const wrap = document.getElementById(containerId);
   if(!wrap) return;
   wrap.innerHTML = '';
   wrap.className = 'sel-busca-wrap fg';
-  
+  wrap.style.position = 'relative';
+ 
   let valorSelecionado = null;
-  
+ 
+  // Campo de texto de busca — sempre visível, tipo="search" melhora teclado mobile
   const input = document.createElement('input');
   input.className = 'sel-busca-input fi';
-  input.placeholder = placeholder || 'Buscar...';
+  input.placeholder = placeholder || 'Digite para buscar...';
   input.autocomplete = 'off';
-  
+  input.setAttribute('type', 'search');
+ 
+  // Botão para limpar seleção
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.innerHTML = '<i class="ti ti-x" style="font-size:14px"></i>';
+  clearBtn.style.cssText = 'position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);display:none;padding:4px;z-index:2';
+  clearBtn.onclick = function(){
+    input.value=''; valorSelecionado=null;
+    clearBtn.style.display='none';
+    renderOpts(''); list.classList.add('show');
+    if(onSelect) onSelect(null);
+    input.focus();
+  };
+ 
   const list = document.createElement('div');
   list.className = 'sel-busca-list';
-  
+ 
   function renderOpts(filtro){
-    const q = (filtro||'').toLowerCase();
+    const q = (filtro||'').toLowerCase().trim();
     const filtradas = q ? opcoes.filter(o=>o.label.toLowerCase().includes(q)) : opcoes;
-    list.innerHTML = filtradas.length === 0
-      ? '<div class="sel-busca-empty">Nenhum resultado</div>'
-      : filtradas.map(o=>`<div class="sel-busca-opt${valorSelecionado===o.value?' selected':''}" data-value="${o.value}" data-label="${esc(o.label)}">${esc(o.label)}</div>`).join('');
+    if(!filtradas.length){
+      list.innerHTML = '<div class="sel-busca-empty">Nenhum resultado para "'+filtro+'"</div>';
+    } else {
+      list.innerHTML = filtradas.map(o=>`<div class="sel-busca-opt${valorSelecionado===o.value?' selected':''}" data-value="${o.value}" data-label="${esc(o.label)}">${esc(o.label)}</div>`).join('');
+    }
   }
-  
-  input.addEventListener('focus', ()=>{ renderOpts(input.value); list.classList.add('show'); });
-  input.addEventListener('input', ()=>{ valorSelecionado=null; renderOpts(input.value); list.classList.add('show'); if(onSelect)onSelect(null); });
-  input.addEventListener('blur', ()=>{ setTimeout(()=>list.classList.remove('show'),200); });
-  
-  list.addEventListener('mousedown', e=>{
-    const opt = e.target.closest('.sel-busca-opt');
+ 
+  input.addEventListener('focus', function(){ renderOpts(input.value); list.classList.add('show'); });
+  input.addEventListener('input', function(){
+    valorSelecionado = null;
+    clearBtn.style.display = input.value ? 'block' : 'none';
+    renderOpts(input.value);
+    list.classList.add('show');
+    if(onSelect) onSelect(null);
+  });
+  input.addEventListener('blur', function(){ setTimeout(function(){ list.classList.remove('show'); }, 250); });
+ 
+  // Touch e mouse na lista
+  function selectOpt(opt){
     if(!opt) return;
     valorSelecionado = opt.dataset.value;
     input.value = opt.dataset.label;
+    clearBtn.style.display = 'block';
     list.classList.remove('show');
-    renderOpts('');
     if(onSelect) onSelect(valorSelecionado);
-  });
-  
-  wrap.appendChild(input);
+  }
+  list.addEventListener('mousedown', function(e){ selectOpt(e.target.closest('.sel-busca-opt')); });
+  list.addEventListener('touchend', function(e){ e.preventDefault(); selectOpt(e.target.closest('.sel-busca-opt')); });
+ 
+  const inputWrap = document.createElement('div');
+  inputWrap.style.position = 'relative';
+  inputWrap.appendChild(input);
+  inputWrap.appendChild(clearBtn);
+ 
+  wrap.appendChild(inputWrap);
   wrap.appendChild(list);
-  renderOpts('');
-  
-  // API para ler o valor selecionado
-  wrap._getValue = ()=>valorSelecionado;
-  wrap._setValue = (val)=>{
-    const o = opcoes.find(x=>String(x.value)===String(val));
-    if(o){ valorSelecionado=o.value; input.value=o.label; }
+ 
+  wrap._getValue = function(){ return valorSelecionado; };
+  wrap._setValue = function(val){
+    const o = opcoes.find(function(x){ return String(x.value)===String(val); });
+    if(o){ valorSelecionado=o.value; input.value=o.label; clearBtn.style.display='block'; }
   };
 }
  
@@ -1869,10 +1944,9 @@ function duplicarReceita(codOrigem){
   editId = null;
   c.innerHTML = frmReceita(null);
  
-  // Inicializa o select com busca de produto
-  criarSelectBusca('f-r-prod-wrap', prodOptsArray(), 'Buscar produto...', (val)=>{
-    if(val) loadReceitaExistente(val);
-    else{ document.getElementById('r-itens').innerHTML=''; document.getElementById('r-custo').textContent='Custo: R$ 0,00'; }
+  // Inicializa o select com busca de produto (sem carregar receita ao selecionar — já temos os insumos)
+  criarSelectBusca('f-r-prod-wrap', prodOptsArray(), 'Digite para buscar o produto destino...', function(val){
+    // Ao selecionar produto destino na duplicação, NÃO limpa os insumos já carregados
   });
  
   // Carrega os insumos da receita original
@@ -1945,6 +2019,112 @@ function onSelectInsumoPers(sel){
     if(ins && ins.Unidade){ unInput.value = ins.Unidade; }
   }
   calcCustoPers();
+}
+ 
+ 
+// Utilitário: bloqueia botão durante operação async para evitar duplo clique
+function lockBtn(selector, texto){
+  const btns = document.querySelectorAll(selector);
+  btns.forEach(function(b){
+    b.disabled = true;
+    b._orig = b.innerHTML;
+    b.innerHTML = '<i class="ti ti-loader" style="font-size:14px;animation:spin .7s linear infinite"></i> '+texto;
+  });
+}
+function unlockBtn(selector){
+  const btns = document.querySelectorAll(selector);
+  btns.forEach(function(b){
+    b.disabled = false;
+    if(b._orig) b.innerHTML = b._orig;
+  });
+}
+ 
+ 
+// ===== CHECKLIST FEIRA =====
+var feiraItems = JSON.parse(localStorage.getItem('lumo_feira_checklist')||'[]');
+// feiraItems = [{id, texto, done}]
+ 
+function salvarFeira(){ localStorage.setItem('lumo_feira_checklist', JSON.stringify(feiraItems)); }
+ 
+function renderFeira(c){
+  setTimeout(function(){ var el=document.getElementById('feira-novo'); if(el&&!el._hasListener){ el._hasListener=true; el.addEventListener('keydown',function(ev){if(ev.key==='Enter')addFeira();}); } },100);
+  var total = feiraItems.length;
+  var feitos = feiraItems.filter(function(i){ return i.done; }).length;
+  var pct = total > 0 ? Math.round(feitos/total*100) : 0;
+ 
+  var itensHTML = feiraItems.length === 0
+    ? '<div class="empty-list" style="padding:30px 0"><i class="ti ti-checkbox" style="font-size:36px;opacity:.2"></i><p>Nenhum item na lista. Adicione abaixo.</p></div>'
+    : feiraItems.map(function(item, i){
+        return '<div class="feira-item'+(item.done?' done':'')+'" id="feira-item-'+i+'">'+
+          '<input type="checkbox" '+(item.done?'checked':'')+' onchange="toggleFeira('+i+',this.checked)">'+
+          '<span class="feira-item-text" onclick="toggleFeira('+i+',!'+item.done+')">'+esc(item.texto)+'</span>'+
+          '<button class="feira-item-del" onclick="delFeira('+i+')" title="Remover"><i class="ti ti-x" style="font-size:14px"></i></button>'+
+        '</div>';
+      }).join('');
+ 
+  c.innerHTML = '<div style="display:flex;flex-direction:column;flex:1">'  +
+    '<div class="mod-header"><div class="mod-title">Checklist Feira</div></div>'+
+    '<div class="feira-body">'+
+      '<div>'+
+        '<div class="feira-progress"><div class="feira-progress-bar" style="width:'+pct+'%"></div></div>'+
+        '<div class="feira-stats">'+feitos+' de '+total+' itens confirmados ('+pct+'%)</div>'+
+      '</div>'+
+      '<div class="feira-toolbar">'+
+        '<button class="btn-feira-sec" onclick="limparChecks()"><i class="ti ti-square"></i>Desmarcar todos</button>'+
+        '<button class="btn-feira-sec" onclick="marcarTodos()"><i class="ti ti-checkbox"></i>Marcar todos</button>'+
+        '<button class="btn-feira-sec" onclick="limparTudoFeira()" style="color:var(--text-danger)"><i class="ti ti-trash"></i>Limpar lista</button>'+
+      '</div>'+
+      '<div id="feira-lista">'+itensHTML+'</div>'+  
+      '<div class="feira-add-row">'+
+        '<input class="feira-add-input" id="feira-novo" placeholder="Adicionar item... (ex: Velas 25g, Carrinho, Troco)">'+
+        '<button class="btn-feira-add" onclick="addFeira()">+ Adicionar</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+ 
+function addFeira(){
+  var inp = document.getElementById('feira-novo');
+  var txt = (inp ? inp.value : '').trim();
+  if(!txt){ toast('Digite o nome do item','e'); return; }
+  feiraItems.push({id: Date.now(), texto: txt, done: false});
+  salvarFeira();
+  inp.value = '';
+  renderFeira(document.getElementById('main-content'));
+  // Foca no input de novo
+  setTimeout(function(){ var el=document.getElementById('feira-novo'); if(el){ el.focus(); el.addEventListener('keydown',function(ev){if(ev.key==='Enter')addFeira();}); } }, 50);
+}
+ 
+function toggleFeira(idx, checked){
+  if(feiraItems[idx] === undefined) return;
+  feiraItems[idx].done = checked;
+  salvarFeira();
+  renderFeira(document.getElementById('main-content'));
+}
+ 
+function delFeira(idx){
+  feiraItems.splice(idx, 1);
+  salvarFeira();
+  renderFeira(document.getElementById('main-content'));
+}
+ 
+function limparChecks(){
+  feiraItems.forEach(function(i){ i.done = false; });
+  salvarFeira();
+  renderFeira(document.getElementById('main-content'));
+}
+ 
+function marcarTodos(){
+  feiraItems.forEach(function(i){ i.done = true; });
+  salvarFeira();
+  renderFeira(document.getElementById('main-content'));
+}
+ 
+function limparTudoFeira(){
+  if(!confirm('Apagar toda a lista de checklist? Esta ação não pode ser desfeita.')) return;
+  feiraItems = [];
+  salvarFeira();
+  renderFeira(document.getElementById('main-content'));
 }
  
 // ===== HISTÓRICO DE COMPRAS POR INSUMO =====
