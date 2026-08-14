@@ -475,6 +475,7 @@ document.addEventListener('click', function(e){
   if(action==='del-pers')    { delPers(cod); }
   if(action==='edit-receita'){ openForm('receitas', cod); }
   if(action==='dup-receita')  { duplicarReceita(cod); }
+  if(action==='del-receita')  { delReceita(cod); }
   if(action==='abrirRelCli') { abrirRelCliente(cod); }
   if(action==='abrirRelMP')  { abrirRelMP(cod); }
   if(action==='openEntregas'){ openEntregas(cod); }
@@ -554,6 +555,7 @@ function render(){
   if(currentMod==='personalizados'){renderPersonalizados(c);return;}
   if(currentMod==='calculadora'){renderCalculadora(c);return;}
   if(currentMod==='feira'){renderFeira(c);return;}
+  if(currentMod==='receitas'){renderModReceitas(c);return;}
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">${LABELS[currentMod]}</div>
@@ -1247,7 +1249,7 @@ async function saveReceita(){
   if(!ok){toast('Preencha insumo e quantidade','e');return;}
   const r=await api({action:'setEngenharia',data:{CodProduto:cp,itens}});
   if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
-  toast('Receita salva!');unlockBtn('.btn-save');await loadAll();goMod('receitas');
+  toast('Receita salva!');unlockBtn('.btn-save');await loadAll();renderModReceitas(document.getElementById('main-content'));currentMod='receitas';document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('on',b.dataset.mod==='receitas'));
 }
  
 async function saveProducao(){
@@ -2125,6 +2127,110 @@ function limparTudoFeira(){
   feiraItems = [];
   salvarFeira();
   renderFeira(document.getElementById('main-content'));
+}
+ 
+ 
+// ===== MÓDULO RECEITAS (listagem com busca e excluir) =====
+function renderModReceitas(c){
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <div class="mod-title">Receitas</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-new" onclick="renderCustosExtras(document.getElementById('main-content'))"
+          style="background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--border-strong);box-shadow:none;font-size:12px">
+          <i class="ti ti-receipt" style="font-size:13px"></i>Custos Extras
+        </button>
+        <button class="btn-new" onclick="openForm('receitas',null)">
+          <i class="ti ti-plus" style="font-size:14px"></i>Nova receita
+        </button>
+      </div>
+    </div>
+    <div class="search-bar"><div class="search-wrap"><i class="ti ti-search"></i>
+      <input class="search-input" id="receita-busca" placeholder="Buscar receita por nome..."
+        oninput="filtrarReceitas(this.value)">
+    </div></div>
+    <div class="list-body" id="receitas-cards" style="padding:14px">${buildReceitasCards('')}</div>
+  </div>`;
+}
+ 
+function filtrarReceitas(q){
+  const body=document.getElementById('receitas-cards');
+  if(body) body.innerHTML=buildReceitasCards((q||'').toLowerCase().trim());
+}
+ 
+function buildReceitasCards(filtro){
+  const eng=DB.EngenhariaProduto||[];
+  const prods=DB.Produtos||[];
+  const mp=DB.MateriaPrima||[];
+  const ci=DB.ComprasItens||[];
+  const comp=DB.Compras||[];
+ 
+  const byProd={};
+  eng.forEach(e=>{if(!byProd[e.CodProduto])byProd[e.CodProduto]=[];byProd[e.CodProduto].push(e);});
+ 
+  let keys=Object.keys(byProd);
+ 
+  // Filtra pelo nome do produto
+  if(filtro){
+    keys=keys.filter(cp=>{
+      const prod=prods.find(p=>String(p.Cod)===String(cp));
+      const nome=(prod?prod.Produto:'Produto '+cp).toLowerCase();
+      return nome.includes(filtro);
+    });
+  }
+ 
+  // Ordena alfabeticamente
+  keys.sort((a,b)=>{
+    const na=prods.find(p=>String(p.Cod)===String(a));
+    const nb=prods.find(p=>String(p.Cod)===String(b));
+    return (na?na.Produto:'').localeCompare(nb?nb.Produto:'','pt');
+  });
+ 
+  if(!keys.length){
+    return filtro
+      ? '<div class="empty-list"><i class="ti ti-search" style="font-size:32px;opacity:.2"></i><p>Nenhuma receita encontrada para "'+esc(filtro)+'".</p></div>'
+      : '<div class="empty-list"><i class="ti ti-tools" style="font-size:32px;opacity:.2"></i><p>Nenhuma receita cadastrada.<br>Clique em "Nova receita" para começar.</p></div>';
+  }
+ 
+  return keys.map(cp=>{
+    const prod=prods.find(p=>String(p.Cod)===String(cp));
+    const itens=byProd[cp];
+    let custo=0;
+    const itensHTML=itens.map(e=>{
+      const ins=mp.find(m=>String(m.Cod)===String(e.CodInsumo));
+      const preco=lastPrice(e.CodInsumo,ci,comp);
+      const sub=Number(e.Quantidade)*preco;custo+=sub;
+      return`<div class="rc-item">
+        <span>${esc(ins?ins.Item:'Insumo '+e.CodInsumo)} — ${e.Quantidade} ${esc(e.Unidade||'')}</span>
+        <span>${fmt$(sub)}</span>
+      </div>`;
+    }).join('');
+ 
+    const custoFinal=calcCustoComExtras(custo);
+ 
+    return`<div class="receita-card">
+      <div class="rc-header">
+        <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="rc-custo">${fmt$(custoFinal)}/un${custosExtras.length>0?'<span class="ce-badge">+extras</span>':''}</span>
+          <button class="bi" data-action="dup-receita" data-cod="${cp}" title="Duplicar receita"><i class="ti ti-copy"></i></button>
+          <button class="bi" data-action="edit-receita" data-cod="${cp}" title="Editar"><i class="ti ti-edit"></i></button>
+          <button class="bi" data-action="del-receita" data-cod="${cp}" title="Excluir receita" style="color:var(--text-danger)"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      ${itensHTML||'<div class="rc-item" style="color:var(--text-muted)">Sem insumos.</div>'}
+    </div>`;
+  }).join('');
+}
+ 
+async function delReceita(codProduto){
+  if(!confirm('Excluir a receita deste produto? Os insumos serão removidos mas o produto permanece cadastrado.'))return;
+  // Apaga todos os insumos da receita (setEngenharia com lista vazia)
+  const r=await api({action:'setEngenharia',data:{CodProduto:String(codProduto),itens:[]}});
+  if(r.error){toast('Erro ao excluir: '+r.error,'e');return;}
+  toast('Receita excluída');
+  await loadAll();
+  renderModReceitas(document.getElementById('main-content'));
 }
  
 // ===== HISTÓRICO DE COMPRAS POR INSUMO =====
