@@ -524,7 +524,7 @@ document.addEventListener('click', function(e){
 let currentMod='dashboard';
 let editId=null;
 
-const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote',feira:'Checklist Feira',codificacao:'Codificação de Produtos'};
+const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote',feira:'Checklist Feira',codificacao:'Codificação de Produtos',atribcod:'Atribuir Códigos aos Produtos'};
 
 function fmt$(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function fmtD(d){if(!d)return'';try{const p=String(d).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d}catch(e){return d}}
@@ -593,9 +593,11 @@ function render(){
   if(currentMod==='feira'){renderFeira(c);return;}
   if(currentMod==='receitas'){renderModReceitas(c);return;}
   if(currentMod==='codificacao'){renderCodificacao(c);return;}
+  if(currentMod==='atribcod'){renderAtribCod(c);return;}
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">${LABELS[currentMod]}</div>
+      ${currentMod==='produtos'?`<button class="btn-new" onclick="goMod('atribcod')" style="background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--border-strong);box-shadow:none;font-size:12px;margin-right:8px"><i class="ti ti-tags" style="font-size:13px"></i>Atribuir códigos</button>`:''}
       <button class="btn-new" data-action="novo-reg"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
     </div>
     <div class="search-bar"><div class="search-wrap"><i class="ti ti-search"></i>
@@ -699,10 +701,10 @@ function listMP(){
 
 function listProdutos(){
   return(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt")).map(p=>({
-    s:(p.Produto+p.Grupo+p.Colecao).toLowerCase(),
+    s:(p.Produto+p.Grupo+p.Colecao+(p.CodPadrao||'')).toLowerCase(),
     h:`<div class="list-item">
       <div class="li-av t">${initials(p.Produto)}</div>
-      <div class="li-body"><div class="li-name">${esc(p.Produto)}</div>
+      <div class="li-body"><div class="li-name">${esc(p.Produto)}${p.CodPadrao?` <span class="cod-code" style="font-size:11px;margin-left:4px">${esc(p.CodPadrao)}</span>`:''}</div>
         <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')} · Estoque: ${p.EstoqueAtual||0}</div></div>
       <div class="li-right">
         <span class="badge ${p.AlertaEstoqueBaixo?'alerta':'ok'}">${p.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
@@ -892,6 +894,65 @@ function frmMP(id){
   </div></div>`;
 }
 
+function codPadraoOpts(selected){
+  const linhas=(DB.Codificacao||[]).slice().sort((a,b)=>String(a.CodigoFinal||'').localeCompare(String(b.CodigoFinal||'')));
+  const sel=selected||'';
+  let opts='<option value="">Sem código</option>';
+  opts+=linhas.map(l=>`<option value="${esc(l.CodigoFinal)}" ${String(sel)===String(l.CodigoFinal)?'selected':''}>${esc(l.CodigoFinal)} — ${esc(l.TipoDesc||'')} / ${esc(l.Essencia||'')}</option>`).join('');
+  return opts;
+}
+
+function renderAtribCod(c){
+  const produtos=(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt"));
+  const total=produtos.length;
+  const feitos=produtos.filter(p=>p.CodPadrao).length;
+  const rowsHTML=(list)=>list.map(p=>`<div class="list-item" id="atrib-row-${p.Cod}">
+      <div class="li-av t">${initials(p.Produto)}</div>
+      <div class="li-body"><div class="li-name">${esc(p.Produto)}</div>
+        <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')}</div></div>
+      <div class="li-right" style="min-width:180px">
+        <select class="fi" style="font-size:13px;padding:6px 24px 6px 8px" onchange="salvarCodPadrao('${p.Cod}',this.value,this)">${codPadraoOpts(p.CodPadrao)}</select>
+      </div></div>`).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <div class="mod-title">Atribuir Códigos aos Produtos</div>
+      <button class="btn-new" onclick="goMod('produtos')" style="background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--border-strong);box-shadow:none;font-size:12px"><i class="ti ti-arrow-left" style="font-size:13px"></i>Voltar</button>
+    </div>
+    <div style="padding:10px 16px;font-size:12px;color:var(--text-muted)">${feitos} de ${total} produtos com código atribuído. A troca no menu salva automaticamente.</div>
+    <div class="search-bar"><div class="search-wrap"><i class="ti ti-search"></i>
+      <input class="search-input" id="atrib-search" placeholder="Buscar produto..." oninput="filtrarAtribCod(this.value)">
+    </div></div>
+    <div class="list-body" id="atrib-list-body">${rowsHTML(produtos)}</div>
+  </div>`;
+}
+
+function filtrarAtribCod(q){
+  q=(q||'').toLowerCase().trim();
+  const produtos=(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt"))
+    .filter(p=>(p.Produto+p.Grupo+p.Colecao).toLowerCase().includes(q));
+  const body=document.getElementById('atrib-list-body');
+  if(!body)return;
+  if(!produtos.length){body.innerHTML=`<div class="empty-list"><i class="ti ti-inbox"></i><p>Nenhum produto encontrado.</p></div>`;return;}
+  body.innerHTML=produtos.map(p=>`<div class="list-item" id="atrib-row-${p.Cod}">
+      <div class="li-av t">${initials(p.Produto)}</div>
+      <div class="li-body"><div class="li-name">${esc(p.Produto)}</div>
+        <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')}</div></div>
+      <div class="li-right" style="min-width:180px">
+        <select class="fi" style="font-size:13px;padding:6px 24px 6px 8px" onchange="salvarCodPadrao('${p.Cod}',this.value,this)">${codPadraoOpts(p.CodPadrao)}</select>
+      </div></div>`).join('');
+}
+
+async function salvarCodPadrao(cod,valor,selEl){
+  const prod=(DB.Produtos||[]).find(x=>String(x.Cod)===String(cod));
+  if(!prod)return;
+  selEl.disabled=true;
+  const r=await api({action:'update',sheet:'Produtos',cod:cod,data:{CodPadrao:valor}});
+  selEl.disabled=false;
+  if(r.error){toast('Erro ao salvar: '+r.error,'e');return;}
+  prod.CodPadrao=valor;
+  toast('Código salvo!');
+}
+
 function frmProduto(id){
   const d=id?(DB.Produtos||[]).find(x=>String(x.Cod)===String(id)):{};
   return frmHdr('produtos',id?'Editar produto':'Novo produto')+`
@@ -910,6 +971,10 @@ function frmProduto(id){
     <div class="frow">
       <div class="fg"><label class="fl">Tamanho (A × L × P)</label><input class="fi" id="f-p-tam" value="${esc(d.Tamanho||'')}" placeholder="8x6x6 cm"></div>
       <div class="fg"><label class="fl">Estoque mínimo</label><input class="fi" id="f-p-em" type="number" value="${d.EstoqueMinimo||0}" min="0"></div>
+    </div>
+    <div class="fsec">Codificação padrão</div>
+    <div class="fg"><label class="fl">Código padrão</label>
+      <select class="fi" id="f-p-cod">${codPadraoOpts(d.CodPadrao)}</select>
     </div>
   </div>
   <div class="form-footer">
@@ -1198,7 +1263,7 @@ async function saveProduto(){
   lockBtn('.btn-save','Salvando...');
   const nome=document.getElementById('f-p-nome').value.trim();
   if(!nome){toast('Informe o nome do produto','e');return;}
-  const data={Produto:nome,Grupo:document.getElementById('f-p-gr').value,Colecao:document.getElementById('f-p-col').value,DataLancamento:document.getElementById('f-p-dt').value,PesoTotal:document.getElementById('f-p-peso').value||0,Tamanho:document.getElementById('f-p-tam').value,EstoqueMinimo:document.getElementById('f-p-em').value||0};
+  const data={Produto:nome,Grupo:document.getElementById('f-p-gr').value,Colecao:document.getElementById('f-p-col').value,DataLancamento:document.getElementById('f-p-dt').value,PesoTotal:document.getElementById('f-p-peso').value||0,Tamanho:document.getElementById('f-p-tam').value,EstoqueMinimo:document.getElementById('f-p-em').value||0,CodPadrao:document.getElementById('f-p-cod').value||''};
   const r=editId?await api({action:'update',sheet:'Produtos',cod:editId,data}):await api({action:'create',sheet:'Produtos',data});
   if(r.error){unlockBtn('.btn-save');toast('Erro: '+r.error,'e');return;}
   toast('Produto salvo!');unlockBtn('.btn-save');await loadAll();goMod('produtos');
@@ -2319,7 +2384,7 @@ function renderCodificacao(c){
 
   // Tabela de essências
   const essRows = essencias.map((e,i)=>`<tr>
-    <td class="cod-num">${esc(String(e.Numero||''))}</td>
+    <td class="cod-num">${esc(String(e.Numero||'').padStart(3,'0'))}</td>
     <td>${esc(e.Nome||'')}</td>
     <td><button class="btn-cod-del" onclick="delCodEssencia('${e.Id}')" title="Remover"><i class="ti ti-x" style="font-size:14px"></i></button></td>
   </tr>`).join('');
@@ -2334,7 +2399,7 @@ function renderCodificacao(c){
 
   // Opções de tipo e essência para o formulário de geração
   const tipoOpts = tipos.map(t=>`<option value="${t.Id}" data-cod="${esc(t.Cod)}" data-desc="${esc(t.Descricao)}">${esc(t.Cod)} — ${esc(t.Descricao)}</option>`).join('');
-  const essOpts  = essencias.map(e=>`<option value="${e.Id}" data-num="${e.Numero}" data-nome="${esc(e.Nome)}">${e.Numero} — ${esc(e.Nome)}</option>`).join('');
+  const essOpts  = essencias.map(e=>`<option value="${e.Id}" data-num="${String(e.Numero||'').padStart(3,'0')}" data-nome="${esc(e.Nome)}">${String(e.Numero||'').padStart(3,'0')} — ${esc(e.Nome)}</option>`).join('');
 
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
@@ -2367,7 +2432,7 @@ function renderCodificacao(c){
           <tbody id="cod-ess-body">${essRows||'<tr><td colspan="3" style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Nenhuma essência cadastrada</td></tr>'}</tbody>
         </table>
         <div class="cod-add-row essencias">
-          <input class="fi cod-num" id="cod-ess-num" type="number" placeholder="Nº" min="1">
+          <input class="fi cod-num" id="cod-ess-num" type="text" inputmode="numeric" placeholder="Nº (ex: 001)" maxlength="3">
           <input class="fi" id="cod-ess-nome" placeholder="Ex: Champagne">
           <button class="btn-cod-add" onclick="addCodEssencia()"><i class="ti ti-plus" style="font-size:13px"></i> Adicionar</button>
         </div>
@@ -2407,7 +2472,7 @@ function previewCodigo(){
   if(!tipoSel.value||!essSel.value){ prev.value=''; return; }
   const cod  = tipoOpt.dataset.cod||'';
   const num  = essOpt.dataset.num||'';
-  prev.value = cod+'_'+num;
+  prev.value = cod+String(num).padStart(3,'0');
 }
 
 async function addCodTipo(){
@@ -2431,9 +2496,10 @@ async function delCodTipo(id){
 }
 
 async function addCodEssencia(){
-  const num  = document.getElementById('cod-ess-num').value;
+  let num  = (document.getElementById('cod-ess-num').value||'').trim();
   const nome = (document.getElementById('cod-ess-nome').value||'').trim();
   if(!num||!nome){toast('Informe número e nome','e');return;}
+  num = num.replace(/\D/g,'').padStart(3,'0').slice(-3);
   const r = await api({action:'createCodEssencia', data:{Numero:num, Nome:nome}});
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Essência adicionada!');
@@ -2459,7 +2525,7 @@ async function addCodLinha(){
   const tipoDesc = tipoOpt.getAttribute('data-desc')||'';
   const num      = essOpt.dataset.num||'';
   const essNome  = essOpt.getAttribute('data-nome')||'';
-  const codFinal = tipoCod+'_'+num;
+  const codFinal = tipoCod+String(num).padStart(3,'0');
   const r = await api({action:'createCodLinha', data:{TipoCod:tipoCod, TipoDesc:tipoDesc, Numero:num, Essencia:essNome, CodigoFinal:codFinal}});
   if(r.error){toast('Erro: '+r.error,'e');return;}
   toast('Código '+codFinal+' adicionado!');
@@ -2481,7 +2547,7 @@ async function gerarTodosCodigos(){
   const novas = [];
   tipos.forEach(t=>{
     essencias.forEach(e=>{
-      const cod = (t.Cod||'')+'_'+(e.Numero||'');
+      const cod = (t.Cod||'')+String(e.Numero||'').padStart(3,'0');
       if(!existentes.has(cod)) novas.push({TipoCod:t.Cod, TipoDesc:t.Descricao, Numero:e.Numero, Essencia:e.Nome, CodigoFinal:cod});
     });
   });
