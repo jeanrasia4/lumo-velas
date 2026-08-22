@@ -570,7 +570,7 @@ function renderAlerts(){
   const bar=document.getElementById('alerts-bar');
   const al=[];
   (DB.MateriaPrima||[]).filter(m=>m.AlertaEstoqueBaixo).forEach(m=>al.push(esc(m.Item)+' (insumo baixo)'));
-  (DB.Produtos||[]).filter(p=>p.AlertaEstoqueBaixo).forEach(p=>al.push(esc(p.Produto)+' (produto baixo)'));
+  (DB.Produtos||[]).filter(p=>p.AlertaEstoqueBaixo).forEach(p=>al.push(esc(prodLabel(p))+' (produto baixo)'));
   if(al.length){bar.className='alerts on';bar.innerHTML=al.map(a=>`<span class="achip"><i class="ti ti-alert-triangle" style="font-size:13px"></i>${a}</span>`).join('');}
   else bar.className='alerts';
 }
@@ -642,7 +642,7 @@ function renderDash(){
 
   const alertsHTML=alerts.length?alerts.map(a=>{
     const isMP=a.Item!==undefined;
-    return`<div class="dash-alert-item"><div><div class="dai-name">${esc(isMP?a.Item:a.Produto)}</div><div class="dai-sub">${isMP?'Insumo':'Produto'} · Atual: ${Number(a.EstoqueAtual||0).toFixed(isMP?2:0)} / Mín: ${a.EstoqueMinimo||0}</div></div><span class="badge alerta">Baixo</span></div>`;
+    return`<div class="dash-alert-item"><div><div class="dai-name">${esc(isMP?a.Item:prodLabel(a))}</div><div class="dai-sub">${isMP?'Insumo':'Produto'} · Atual: ${Number(a.EstoqueAtual||0).toFixed(isMP?2:0)} / Mín: ${a.EstoqueMinimo||0}</div></div><span class="badge alerta">Baixo</span></div>`;
   }).join(''):`<p style="font-size:13px;color:var(--text-muted);padding:4px 0">Nenhum alerta no momento. ✓</p>`;
 
   return`<div class="dash-body">
@@ -797,7 +797,7 @@ function listProducao(){
       s:((prod?prod.Produto:'')+p.DataProducao).toLowerCase(),
       h:`<div class="list-item">
         <div class="li-av i"><i class="ti ti-hammer"></i></div>
-        <div class="li-body"><div class="li-name">${esc(prod?prod.Produto:'Produto '+p.CodProduto)}</div>
+        <div class="li-body"><div class="li-name">${esc(prod?prodLabel(prod):'Produto '+p.CodProduto)}</div>
           <div class="li-sub">${p.Quantidade} un · ${fmtD(p.DataProducao)} · Total: ${fmt$(p.CustoCalculado)} · <strong>1 un: ${fmt$(p.Quantidade>0?Number(p.CustoCalculado)/Number(p.Quantidade):0)}</strong></div></div>
         <div class="li-right">
           <button class="bi" data-action="del-rec" data-sheet="Producao" data-mod="producao" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
@@ -810,7 +810,11 @@ function renderReceitas(){
   const eng=DB.EngenhariaProduto||[],prods=DB.Produtos||[],mp=DB.MateriaPrima||[],ci=DB.ComprasItens||[],comp=DB.Compras||[];
   const byProd={};
   eng.forEach(e=>{if(!byProd[e.CodProduto])byProd[e.CodProduto]=[];byProd[e.CodProduto].push(e);});
-  const keys=Object.keys(byProd);
+  const keys=Object.keys(byProd).sort((a,b)=>{
+    const pa=prods.find(p=>String(p.Cod)===String(a));
+    const pb=prods.find(p=>String(p.Cod)===String(b));
+    return prodSortKey(pa).localeCompare(prodSortKey(pb),'pt');
+  });
   if(!keys.length)return`<div class="empty-list"><i class="ti ti-tools"></i><p>Nenhuma receita cadastrada.<br>Clique em "Novo" para começar.</p></div>`;
   return`<div style="padding:16px">`+keys.map(cp=>{
     const prod=prods.find(p=>String(p.Cod)===String(cp));
@@ -823,7 +827,7 @@ function renderReceitas(){
     }).join('');
     return`<div class="receita-card">
       <div class="rc-header">
-        <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
+        <span class="rc-name">${esc(prod?prodLabel(prod):'Produto '+cp)}</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="rc-custo" title="Inclui custos extras">${fmt$(calcCustoComExtras(custo))}/un${custosExtras.length>0?'<span class="ce-badge">+extras</span>':''}</span>
           <button class="bi" data-action="dup-receita" data-cod="${cp}" title="Duplicar receita"><i class="ti ti-copy"></i></button>
@@ -1146,7 +1150,7 @@ function frmProducao(){
 
 /* ===== ITEM ROWS ===== */
 function mpOpts(){return(DB.MateriaPrima||[]).slice().sort((a,b)=>(a.Item||"").localeCompare(b.Item||"","pt")).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (${esc(m.Unidade||'')})</option>`).join('')}
-function prodOpts(){return(DB.Produtos||[]).slice().sort((a,b)=>(a.Produto||"").localeCompare(b.Produto||"","pt")).map(p=>`<option value="${p.Cod}">${esc(p.Produto)}</option>`).join('')}
+function prodOpts(){return(DB.Produtos||[]).slice().sort((a,b)=>prodSortKey(a).localeCompare(prodSortKey(b),"pt")).map(p=>`<option value="${p.Cod}">${esc(prodLabel(p))}</option>`).join('')}
 
 function addItemCompra(){
   const l=document.getElementById('co-itens');if(!l)return;
@@ -1381,7 +1385,7 @@ function openEntregas(codVenda){
   const rows=itens.map(i=>{
     const p=prods.find(x=>String(x.Cod)===String(i.CodProduto));
     return`<div class="entrega-row">
-      <span>${esc(p?p.Produto:'Produto '+i.CodProduto)} <span style="color:var(--text-muted)">(${i.Quantidade} un)</span></span>
+      <span>${esc(p?prodLabel(p):'Produto '+i.CodProduto)} <span style="color:var(--text-muted)">(${i.Quantidade} un)</span></span>
       <label class="toggle-ent">
         <input type="checkbox" ${i.Entregue==='Sim'?'checked':''} onchange="toggleEntrega(${codVenda},${i.CodProduto},this.checked)">
         <span>${i.Entregue==='Sim'?'Entregue':'Pendente'}</span>
@@ -2025,10 +2029,19 @@ function mpOptsArray(){
     .sort((a,b)=>(a.Item||'').localeCompare(b.Item||'','pt'))
     .map(m=>({value:String(m.Cod),label:m.Item+(m.Unidade?' ('+m.Unidade+')':'')}));
 }
+function prodLabel(p){
+  if(!p) return '';
+  return p.CodPadrao ? (p.CodPadrao+' — '+p.Produto) : p.Produto;
+}
+function prodSortKey(p){
+  if(!p) return '9';
+  return p.CodPadrao ? ('0'+p.CodPadrao) : ('1'+(p.Produto||''));
+}
+
 function prodOptsArray(){
   return (DB.Produtos||[]).slice()
-    .sort((a,b)=>(a.Produto||'').localeCompare(b.Produto||'','pt'))
-    .map(p=>({value:String(p.Cod),label:p.Produto}));
+    .sort((a,b)=>prodSortKey(a).localeCompare(prodSortKey(b),'pt'))
+    .map(p=>({value:String(p.Cod),label:prodLabel(p)}));
 }
 
 
