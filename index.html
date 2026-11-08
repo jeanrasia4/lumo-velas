@@ -114,6 +114,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .li-right{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .li-right.col{flex-direction:column;align-items:flex-end;gap:4px}
 .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge-stock{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;background:var(--surface-3);color:var(--text-secondary)}
 .badge.pago{background:var(--bg-success);color:var(--text-success)}
 .badge.pendente{background:var(--bg-warning);color:var(--text-warning)}
 .badge.ok{background:var(--bg-success);color:var(--text-success)}
@@ -470,6 +471,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
       <button class="nb" onclick="goMod('compras')" data-mod="compras"><i class="ti ti-shopping-cart"></i>Compras</button>
       <button class="nb" onclick="goMod('vendas')" data-mod="vendas"><i class="ti ti-receipt"></i>Vendas</button>
       <button class="nb" onclick="goMod('financeiro')" data-mod="financeiro"><i class="ti ti-chart-bar"></i>Financeiro</button>
+      <button class="nb" onclick="goMod('ajustes')" data-mod="ajustes"><i class="ti ti-adjustments"></i>Ajustes de Estoque</button>
     </div>
     <!-- Linha 3: Produção -->
     <div class="nav-row">
@@ -503,6 +505,7 @@ document.addEventListener('click', function(e){
   const cod = btn.dataset.cod;
   if(action==='edit-pers')   { openFormPers(cod); }
   if(action==='del-pers')    { delPers(cod); }
+  if(action==='del-ajuste')  { delAjuste(cod); }
   if(action==='edit-receita'){ openForm('receitas', cod); }
   if(action==='dup-receita')  { duplicarReceita(cod); }
   if(action==='del-receita')  { delReceita(cod); }
@@ -524,7 +527,7 @@ document.addEventListener('click', function(e){
 let currentMod='dashboard';
 let editId=null;
 
-const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote',feira:'Checklist Feira',codificacao:'Codificação de Produtos',atribcod:'Atribuir Códigos aos Produtos'};
+const LABELS={dashboard:'Início',mp:'Insumos',produtos:'Produtos',clientes:'Clientes',fornecedores:'Fornecedores',compras:'Compras',vendas:'Vendas',receitas:'Receitas',producao:'Produção',financeiro:'Financeiro',relcli:'Relatório do Cliente',personalizados:'Personalizados',calculadora:'Calculadora de Lote',feira:'Checklist Feira',codificacao:'Codificação de Produtos',atribcod:'Atribuir Códigos aos Produtos',ajustes:'Ajustes de Estoque'};
 
 function fmt$(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function fmtD(d){if(!d)return'';try{const p=String(d).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d}catch(e){return d}}
@@ -547,7 +550,7 @@ async function api(params){
   try{
     // Envia via GET com payload JSON encodado — evita bloqueio CORS do POST
     const payload=encodeURIComponent(JSON.stringify(params));
-    const r=await fetch(URL_API+'?payload='+payload,{method:'GET',redirect:'follow'});
+    const r=await fetch(URL_API+'?payload='+payload+'&_ts='+Date.now(),{method:'GET',redirect:'follow',cache:'no-store'});
     const txt=await r.text();
     return JSON.parse(txt);
   }catch(e){return{error:e.message}}
@@ -563,6 +566,7 @@ async function loadAll(){
   if(!DB.CodTipos) DB.CodTipos=[];
   if(!DB.CodEssencias) DB.CodEssencias=[];
   if(!DB.Codificacao) DB.Codificacao=[];
+  if(!DB.AjustesEstoque) DB.AjustesEstoque=[];
   setConn('ok','Conectado');renderAlerts();return true;
 }
 
@@ -589,6 +593,7 @@ function render(){
   if(currentMod==='relcli'){renderRelCliente(c);return;}
   if(currentMod==='relmp'){renderRelMP(c);return;}
   if(currentMod==='personalizados'){renderPersonalizados(c);return;}
+  if(currentMod==='ajustes'){renderAjustes(c);return;}
   if(currentMod==='calculadora'){renderCalculadora(c);return;}
   if(currentMod==='feira'){renderFeira(c);return;}
   if(currentMod==='receitas'){renderModReceitas(c);return;}
@@ -668,7 +673,7 @@ function resetURL(){
 /* ===== LISTAGENS ===== */
 function renderListItems(mod,q){
   let items=[];
-  if(mod==='receitas')return renderReceitas();
+  if(mod==='receitas')return buildReceitasCards(q||'');
   switch(mod){
     case 'mp':items=listMP();break;
     case 'produtos':items=listProdutos();break;
@@ -689,8 +694,9 @@ function listMP(){
     h:`<div class="list-item">
       <div class="li-av">${initials(m.Item)}</div>
       <div class="li-body"><div class="li-name">${esc(m.Item)}</div>
-        <div class="li-sub">${esc(m.Grupo||'—')} · ${esc(m.Unidade||'')} · Estoque: ${Number(m.EstoqueAtual||0).toFixed(2)}</div></div>
+        <div class="li-sub">${esc(m.Grupo||'—')} · ${esc(m.Unidade||'')}</div></div>
       <div class="li-right">
+        <span class="badge-stock" title="Estoque atual">${Number(m.EstoqueAtual||0).toFixed(2)}</span>
         <span class="badge ${m.AlertaEstoqueBaixo?'alerta':'ok'}">${m.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
         <button class="bi" data-action="abrirRelMP" data-cod="${m.Cod}" title="Histórico de compras"><i class="ti ti-history"></i></button>
         <button class="bi" data-action="edit-rec" data-mod="mp" data-cod="${m.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
@@ -705,8 +711,9 @@ function listProdutos(){
     h:`<div class="list-item">
       <div class="li-av t">${initials(p.Produto)}</div>
       <div class="li-body"><div class="li-name">${esc(p.Produto)}${p.CodPadrao?` <span class="cod-code" style="font-size:11px;margin-left:4px">${esc(p.CodPadrao)}</span>`:''}</div>
-        <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')} · Estoque: ${p.EstoqueAtual||0}</div></div>
+        <div class="li-sub">${esc(p.Grupo||'—')} · ${esc(p.Colecao||'')}</div></div>
       <div class="li-right">
+        <span class="badge-stock" title="Estoque atual">${p.EstoqueAtual||0}</span>
         <span class="badge ${p.AlertaEstoqueBaixo?'alerta':'ok'}">${p.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
         <button class="bi" data-action="edit-rec" data-mod="produtos" data-cod="${p.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
         <button class="bi" data-action="del-rec" data-sheet="Produtos" data-mod="produtos" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
@@ -804,37 +811,6 @@ function listProducao(){
         </div></div>`
     };
   });
-}
-
-function renderReceitas(){
-  const eng=DB.EngenhariaProduto||[],prods=DB.Produtos||[],mp=DB.MateriaPrima||[],ci=DB.ComprasItens||[],comp=DB.Compras||[];
-  const byProd={};
-  eng.forEach(e=>{if(!byProd[e.CodProduto])byProd[e.CodProduto]=[];byProd[e.CodProduto].push(e);});
-  const keys=Object.keys(byProd).sort((a,b)=>{
-    const pa=prods.find(p=>String(p.Cod)===String(a));
-    const pb=prods.find(p=>String(p.Cod)===String(b));
-    return prodSortKey(pa).localeCompare(prodSortKey(pb),'pt');
-  });
-  if(!keys.length)return`<div class="empty-list"><i class="ti ti-tools"></i><p>Nenhuma receita cadastrada.<br>Clique em "Novo" para começar.</p></div>`;
-  return`<div style="padding:16px">`+keys.map(cp=>{
-    const prod=prods.find(p=>String(p.Cod)===String(cp));
-    const itens=byProd[cp];let custo=0;
-    const itensHTML=itens.map(e=>{
-      const ins=mp.find(m=>String(m.Cod)===String(e.CodInsumo));
-      const preco=lastPrice(e.CodInsumo,ci,comp);
-      const sub=Number(e.Quantidade)*preco;custo+=sub;
-      return`<div class="rc-item"><span>${esc(ins?ins.Item:'Insumo '+e.CodInsumo)} — ${e.Quantidade} ${esc(e.Unidade||'')}</span><span>${fmt$(sub)}</span></div>`;
-    }).join('');
-    return`<div class="receita-card">
-      <div class="rc-header">
-        <span class="rc-name">${esc(prod?prodLabel(prod):'Produto '+cp)}</span>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rc-custo" title="Inclui custos extras">${fmt$(calcCustoComExtras(custo))}/un${custosExtras.length>0?'<span class="ce-badge">+extras</span>':''}</span>
-          <button class="bi" data-action="dup-receita" data-cod="${cp}" title="Duplicar receita"><i class="ti ti-copy"></i></button>
-          <button class="bi" data-action="edit-receita" data-cod="${cp}" title="Editar"><i class="ti ti-edit"></i></button>
-        </div>
-      </div>${itensHTML}</div>`;
-  }).join('')+'</div>';
 }
 
 function lastPrice(codInsumo,ci,comps){
@@ -1735,6 +1711,116 @@ async function delPers(cod){
   toast('Excluído');await loadAll();goMod('personalizados');
 }
 
+// ===== AJUSTES DE ESTOQUE =====
+const MOTIVOS_AJUSTE=['Perda','Quebra/Dano','Contagem/Inventário','Correção manual','Outro'];
+
+function renderAjustes(c){
+  const ajustes=(DB.AjustesEstoque||[]).slice().sort((a,b)=>(b.Data||'').localeCompare(a.Data||'')||Number(b.Cod)-Number(a.Cod));
+  const mp=DB.MateriaPrima||[],prods=DB.Produtos||[];
+  const rowsHTML=ajustes.length===0
+    ?`<div class="empty-list"><i class="ti ti-adjustments" style="font-size:36px;opacity:.2"></i><p>Nenhum ajuste registrado ainda.</p></div>`
+    :ajustes.map(a=>{
+        const isMP=a.TipoItem==='MateriaPrima';
+        const item=isMP?mp.find(m=>String(m.Cod)===String(a.CodItem)):prods.find(p=>String(p.Cod)===String(a.CodItem));
+        const nome=item?(isMP?item.Item:prodLabel(item)):(isMP?'Insumo ':'Produto ')+a.CodItem;
+        const entrada=a.TipoAjuste==='Entrada';
+        return`<div class="list-item">
+          <div class="li-av ${entrada?'':'t'}"><i class="ti ${entrada?'ti-arrow-up':'ti-arrow-down'}" style="font-size:16px"></i></div>
+          <div class="li-body"><div class="li-name">${esc(nome)}</div>
+            <div class="li-sub">${isMP?'Insumo':'Produto'} · ${esc(a.Motivo||'')} · ${fmtD(a.Data)}${a.Observacao?' · '+esc(a.Observacao):''}</div></div>
+          <div class="li-right">
+            <span class="badge ${entrada?'ok':'alerta'}">${entrada?'+':'-'}${Number(a.Quantidade||0)}</span>
+            <button class="bi" data-action="del-ajuste" data-cod="${a.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
+          </div></div>`;
+      }).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <div class="mod-title">Ajustes de Estoque</div>
+      <button class="btn-new" onclick="openFormAjuste()"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+    </div>
+    <div class="list-body" id="list-body">${rowsHTML}</div>
+  </div>`;
+}
+
+function ajusteItemOpts(tipo){
+  if(tipo==='Produto') return(DB.Produtos||[]).slice().sort((a,b)=>prodSortKey(a).localeCompare(prodSortKey(b),"pt")).map(p=>`<option value="${p.Cod}">${esc(prodLabel(p))} (atual: ${p.EstoqueAtual||0})</option>`).join('');
+  return(DB.MateriaPrima||[]).slice().sort((a,b)=>(a.Item||"").localeCompare(b.Item||"","pt")).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (atual: ${Number(m.EstoqueAtual||0).toFixed(2)})</option>`).join('');
+}
+
+function openFormAjuste(){
+  const c=document.getElementById('main-content');
+  const motivoOpts=MOTIVOS_AJUSTE.map(m=>`<option value="${m}">${m}</option>`).join('');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
+    <div class="mod-header">
+      <button class="btn-back" onclick="goMod('ajustes')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <div class="mod-title">Novo ajuste de estoque</div>
+    </div>
+    <div class="form-view"><div class="form-scroll">
+      <div class="fsec">O que está sendo ajustado</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Tipo *</label>
+          <select class="fi" id="aj-tipo" onchange="onChangeAjusteTipo()">
+            <option value="MateriaPrima">Insumo (Matéria-prima)</option>
+            <option value="Produto">Produto</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Movimento *</label>
+          <select class="fi" id="aj-mov">
+            <option value="Entrada">Entrada (adicionar ao estoque)</option>
+            <option value="Saida">Saída (retirar do estoque)</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Item *</label>
+        <select class="fi" id="aj-item">${ajusteItemOpts('MateriaPrima')}</select>
+      </div>
+      <div class="fsec">Detalhes do ajuste</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Quantidade *</label><input class="fi" id="aj-qtd" type="number" step="0.01" min="0" placeholder="0"></div>
+        <div class="fg"><label class="fl">Data do ajuste *</label><input class="fi" id="aj-data" type="date" value="${today()}"></div>
+      </div>
+      <div class="fg"><label class="fl">Motivo *</label>
+        <select class="fi" id="aj-motivo">${motivoOpts}</select>
+      </div>
+      <div class="fg"><label class="fl">Observação</label><input class="fi" id="aj-obs" placeholder="Detalhe opcional (ex: contagem de fim de mês, vidro quebrado no transporte...)"></div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="goMod('ajustes')">Cancelar</button>
+      <button class="btn-save" onclick="saveAjuste()"><i class="ti ti-check" style="font-size:14px"></i>Salvar ajuste</button>
+    </div></div>
+  </div>`;
+}
+
+function onChangeAjusteTipo(){
+  const tipo=document.getElementById('aj-tipo').value;
+  document.getElementById('aj-item').innerHTML=ajusteItemOpts(tipo);
+}
+
+async function saveAjuste(){
+  const tipo=document.getElementById('aj-tipo').value;
+  const codItem=document.getElementById('aj-item').value;
+  const mov=document.getElementById('aj-mov').value;
+  const qtd=document.getElementById('aj-qtd').value;
+  const data=document.getElementById('aj-data').value;
+  const motivo=document.getElementById('aj-motivo').value;
+  const obs=document.getElementById('aj-obs').value;
+  if(!codItem){toast('Selecione o item','e');return;}
+  if(!qtd||Number(qtd)<=0){toast('Informe uma quantidade maior que zero','e');return;}
+  if(!data){toast('Informe a data do ajuste','e');return;}
+  const r=await api({action:'create',sheet:'AjustesEstoque',data:{
+    TipoItem:tipo,CodItem:codItem,TipoAjuste:mov,Quantidade:qtd,Motivo:motivo,Observacao:obs,Data:data
+  }});
+  if(r.error){toast('Erro: '+r.error,'e');return;}
+  toast('Ajuste registrado!');await loadAll();goMod('ajustes');
+}
+
+async function delAjuste(cod){
+  if(!confirm('Excluir este ajuste? O estoque calculado voltará a ignorar esse lançamento.'))return;
+  const r=await api({action:'delete',sheet:'AjustesEstoque',cod:String(cod)});
+  if(r.error){toast('Erro: '+r.error,'e');return;}
+  toast('Ajuste excluído');await loadAll();goMod('ajustes');
+}
+
 // ===== CALCULADORA DE LOTE =====
 function renderCalculadora(c){
   const eng=DB.EngenhariaProduto||[];
@@ -2290,16 +2376,16 @@ function buildReceitasCards(filtro){
   if(filtro){
     keys=keys.filter(cp=>{
       const prod=prods.find(p=>String(p.Cod)===String(cp));
-      const nome=(prod?prod.Produto:'Produto '+cp).toLowerCase();
+      const nome=((prod?prod.Produto:'Produto '+cp)+' '+(prod&&prod.CodPadrao?prod.CodPadrao:'')).toLowerCase();
       return nome.includes(filtro);
     });
   }
 
-  // Ordena alfabeticamente
+  // Ordena por código padrão (produtos com código primeiro)
   keys.sort((a,b)=>{
     const na=prods.find(p=>String(p.Cod)===String(a));
     const nb=prods.find(p=>String(p.Cod)===String(b));
-    return (na?na.Produto:'').localeCompare(nb?nb.Produto:'','pt');
+    return prodSortKey(na).localeCompare(prodSortKey(nb),'pt');
   });
 
   if(!keys.length){
@@ -2328,7 +2414,7 @@ function buildReceitasCards(filtro){
     return`<div class="receita-card${ativa?'':' inativa'}">
       <div class="rc-header">
         <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
-          <span class="rc-name">${esc(prod?prod.Produto:'Produto '+cp)}</span>
+          <span class="rc-name">${esc(prod?prodLabel(prod):'Produto '+cp)}</span>
           ${ativa?'':'<span class="badge-inativa"><i class="ti ti-ban" style="font-size:11px"></i>Inativa</span>'}
         </div>
         <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
