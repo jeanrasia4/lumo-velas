@@ -506,6 +506,7 @@ document.addEventListener('click', function(e){
   if(action==='edit-pers')   { openFormPers(cod); }
   if(action==='del-pers')    { delPers(cod); }
   if(action==='del-ajuste')  { delAjuste(cod); }
+  if(action==='export-estoque-csv'){ exportEstoqueCSV(); }
   if(action==='edit-receita'){ openForm('receitas', cod); }
   if(action==='dup-receita')  { duplicarReceita(cod); }
   if(action==='del-receita')  { delReceita(cod); }
@@ -1736,10 +1737,41 @@ function renderAjustes(c){
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
       <div class="mod-title">Ajustes de Estoque</div>
-      <button class="btn-new" onclick="openFormAjuste()"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-new" data-action="export-estoque-csv" style="background:var(--surface-3);color:var(--text-primary);box-shadow:none;border:1px solid var(--border-strong)"><i class="ti ti-download" style="font-size:14px"></i>CSV</button>
+        <button class="btn-new" onclick="openFormAjuste()"><i class="ti ti-plus" style="font-size:14px"></i>Novo</button>
+      </div>
     </div>
     <div class="list-body" id="list-body">${rowsHTML}</div>
   </div>`;
+}
+
+function exportEstoqueCSV(){
+  // CSV para Excel pt-BR: separador ';', decimal ',', UTF-8 com BOM.
+  const num=v=>{const n=Math.round(Number(v||0)*100)/100;return String(n).replace('.',',');};
+  const txt=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[];
+  (DB.MateriaPrima||[]).forEach(m=>rows.push({t:'Insumo',d:m.Item||'',u:m.Unidade||'',q:m.EstoqueAtual}));
+  (DB.Produtos||[]).forEach(p=>rows.push({t:'Produto',d:prodLabel(p),u:'Un',q:p.EstoqueAtual}));
+  if(!rows.length){toast('Nenhum item para exportar','e');return;}
+  rows.sort((a,b)=>a.d.localeCompare(b.d,'pt',{sensitivity:'base'}));
+  const head=['Tipo','Descrição','Unidade','Estoque atual','Contagem física','Ajuste necessário','Qtd. do ajuste'];
+  const lines=[head.map(txt).join(';')];
+  rows.forEach((r,i)=>{
+    const n=i+2; // linha na planilha (1 = cabeçalho)
+    // Fórmulas em português (Excel pt-BR). Em branco enquanto a contagem não for preenchida.
+    const fAj='=SE(E'+n+'="";"";SE(ARRED(E'+n+'-D'+n+';2)>0;"Entrada";SE(ARRED(E'+n+'-D'+n+';2)<0;"Saída";"OK")))';
+    const fQt='=SE(E'+n+'="";"";ABS(ARRED(E'+n+'-D'+n+';2)))';
+    lines.push([txt(r.t),txt(r.d),txt(r.u),num(r.q),'',txt(fAj),txt(fQt)].join(';'));
+  });
+  const d=new Date(),pad=x=>String(x).padStart(2,'0');
+  const nome='estoque_lumo_'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.csv';
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=nome;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  toast('Relatório gerado: '+rows.length+' itens');
 }
 
 function ajusteItemOpts(tipo){
