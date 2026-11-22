@@ -321,6 +321,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-left:12px;flex-shrink:0}
 .calc-status.ok{background:var(--bg-success);color:var(--text-success)}
 .calc-status.no{background:var(--bg-danger);color:var(--text-danger)}
+.calc-exp-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer}
 .calc-total-item-qtd{font-weight:700;color:var(--text-accent);white-space:nowrap;margin-left:12px}
 .calc-total-item-alerta{font-size:11px;color:var(--text-danger);margin-left:6px;white-space:nowrap}
 .calc-empty{text-align:center;padding:20px;font-size:13px;color:var(--text-muted)}
@@ -373,6 +374,7 @@ select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .calc-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-left:12px;flex-shrink:0}
 .calc-status.ok{background:var(--bg-success);color:var(--text-success)}
 .calc-status.no{background:var(--bg-danger);color:var(--text-danger)}
+.calc-exp-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer}
 .calc-total-item-qtd{font-weight:700;color:var(--text-accent);white-space:nowrap;margin-left:12px}
 .calc-total-item-alerta{font-size:11px;color:var(--text-danger);margin-left:6px;white-space:nowrap}
 .calc-empty{text-align:center;padding:20px;font-size:13px;color:var(--text-muted)}
@@ -521,6 +523,8 @@ document.addEventListener('click', function(e){
   if(action==='del-pers')    { delPers(cod); }
   if(action==='del-ajuste')  { delAjuste(cod); }
   if(action==='export-estoque-csv'){ exportEstoqueCSV(); }
+  if(action==='export-calc-geral'){ exportCalcCSV('geral'); }
+  if(action==='export-calc-receitas'){ exportCalcCSV('receitas'); }
   if(action==='edit-receita'){ openForm('receitas', cod); }
   if(action==='dup-receita')  { duplicarReceita(cod); }
   if(action==='del-receita')  { delReceita(cod); }
@@ -1934,6 +1938,37 @@ function fmtQtd(v){
   return Number.isInteger(n)?n.toString():parseFloat(n.toFixed(4)).toString();
 }
 
+let calcUltimo=null;
+function exportCalcCSV(tipo){
+  if(!calcUltimo){toast('Calcule o lote antes de exportar','e');return;}
+  const num=v=>{const n=Math.round(Number(v||0)*10000)/10000;return String(n).replace('.',',');};
+  const txt=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  let head,lines=[],nome;
+  if(tipo==='geral'){
+    head=['Insumo','Unidade','Necessário','Estoque atual','Situação','Falta'];
+    calcUltimo.totais.forEach(v=>{
+      const falta=Math.round((v.qtdTotal-v.estoqueAtual)*10000)/10000;
+      lines.push([txt(v.nome),txt(v.unidade),num(v.qtdTotal),num(v.estoqueAtual),txt(falta>0?'Sem estoque':'Disponível'),falta>0?num(falta):''].join(';'));
+    });
+    nome='calculadora_resumo_geral_';
+  }else{
+    head=['Produto','Qtd. a produzir','Insumo','Unidade','Qtd. necessária'];
+    calcUltimo.receitas.forEach(r=>{
+      if(r.semReceita) lines.push([txt(r.produto),num(r.qtd),txt('(sem receita cadastrada)'),'',''].join(';'));
+      else lines.push([txt(r.produto),num(r.qtd),txt(r.insumo),txt(r.unidade),num(r.qtdNec)].join(';'));
+    });
+    nome='calculadora_por_receita_';
+  }
+  const d=new Date(),pad=x=>String(x).padStart(2,'0');
+  nome+=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.csv';
+  const blob=new Blob(['﻿'+[head.map(txt).join(';')].concat(lines).join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=nome;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  toast('Arquivo gerado: '+lines.length+' linhas');
+}
+
 function calcularLote(){
   const eng=DB.EngenhariaProduto||[];
   const prods=DB.Produtos||[];
@@ -1949,9 +1984,11 @@ function calcularLote(){
   const result=document.getElementById('calc-result');
   result.className='calc-result show';
   const totalInsumos={};
+  const exportReceitas=[];
 
   const blocosHTML=selecionados.map(({prod,qtd})=>{
     const receita=eng.filter(e=>String(e.CodProduto)===String(prod.Cod));
+    if(!receita.length){exportReceitas.push({produto:prodLabel(prod),qtd,semReceita:true});}
     if(!receita.length)return`<div class="calc-rec-bloco">
       <div class="calc-rec-hdr"><span class="calc-rec-nome">${esc(prod.Produto)}</span><span class="calc-rec-qtd">${qtd} un</span></div>
       <div style="padding:12px 16px;font-size:13px;color:var(--text-muted)">Sem receita cadastrada.</div>
@@ -1965,6 +2002,7 @@ function calcularLote(){
       const k=String(e.CodInsumo);
       if(!totalInsumos[k])totalInsumos[k]={nome,unidade:uni,qtdTotal:0,estoqueAtual:Number(ins?ins.EstoqueAtual||0:0)};
       totalInsumos[k].qtdTotal+=qtdNec;
+      exportReceitas.push({produto:prodLabel(prod),qtd,insumo:nome,unidade:uni,qtdNec});
       return`<div class="calc-rec-item">
         <span class="calc-rec-item-nome">${esc(nome)}</span>
         <span class="calc-rec-item-qtd">${fmtQtd(qtdNec)} ${esc(uni)}</span>
@@ -1997,11 +2035,16 @@ function calcularLote(){
       </div>`;
     }).join('');
 
+  calcUltimo={receitas:exportReceitas,totais:Object.values(totalInsumos).sort((a,b)=>a.nome.localeCompare(b.nome,'pt',{sensitivity:'base'}))};
   const totalVelas=selecionados.reduce((s,x)=>s+x.qtd,0);
   result.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div class="fin-sec" style="margin:0">Por receita</div>
       <span style="font-size:12px;color:var(--text-muted)">${selecionados.length} tipo(s) · ${totalVelas} vela(s)</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="calc-exp-btn" data-action="export-calc-geral"><i class="ti ti-download" style="font-size:14px"></i>Exportar resumo geral (CSV)</button>
+      <button class="calc-exp-btn" data-action="export-calc-receitas"><i class="ti ti-download" style="font-size:14px"></i>Exportar por receita (CSV)</button>
     </div>
     ${blocosHTML}
     <div class="fin-sec" style="margin-top:20px;margin-bottom:12px">Resumo total de insumos</div>
