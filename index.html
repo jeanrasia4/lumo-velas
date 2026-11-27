@@ -522,6 +522,7 @@ document.addEventListener('click', function(e){
   if(action==='edit-pers')   { openFormPers(cod); }
   if(action==='del-pers')    { delPers(cod); }
   if(action==='del-ajuste')  { delAjuste(cod); }
+  if(action==='ajuste-rapido'){ openFormAjuste(btn.dataset.tipo, cod, btn.dataset.voltar); }
   if(action==='export-estoque-csv'){ exportEstoqueCSV(); }
   if(action==='export-calc-geral'){ exportCalcCSV('geral'); }
   if(action==='export-calc-receitas'){ exportCalcCSV('receitas'); }
@@ -717,6 +718,7 @@ function listMP(){
       <div class="li-right">
         <span class="badge-stock" title="Estoque atual">${Number(m.EstoqueAtual||0).toFixed(2)}</span>
         <span class="badge ${m.AlertaEstoqueBaixo?'alerta':'ok'}">${m.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
+        <button class="bi" data-action="ajuste-rapido" data-tipo="MateriaPrima" data-cod="${m.Cod}" data-voltar="mp" title="Ajustar estoque"><i class="ti ti-adjustments"></i></button>
         <button class="bi" data-action="abrirRelMP" data-cod="${m.Cod}" title="Histórico de compras"><i class="ti ti-history"></i></button>
         <button class="bi" data-action="edit-rec" data-mod="mp" data-cod="${m.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
         <button class="bi" data-action="del-rec" data-sheet="MateriaPrima" data-mod="mp" data-cod="${m.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
@@ -734,6 +736,7 @@ function listProdutos(){
       <div class="li-right">
         <span class="badge-stock" title="Estoque atual">${p.EstoqueAtual||0}</span>
         <span class="badge ${p.AlertaEstoqueBaixo?'alerta':'ok'}">${p.AlertaEstoqueBaixo?'Baixo':'Ok'}</span>
+        <button class="bi" data-action="ajuste-rapido" data-tipo="Produto" data-cod="${p.Cod}" data-voltar="produtos" title="Ajustar estoque"><i class="ti ti-adjustments"></i></button>
         <button class="bi" data-action="edit-rec" data-mod="produtos" data-cod="${p.Cod}" title="Editar"><i class="ti ti-edit"></i></button>
         <button class="bi" data-action="del-rec" data-sheet="Produtos" data-mod="produtos" data-cod="${p.Cod}" title="Excluir"><i class="ti ti-trash"></i></button>
       </div></div>`
@@ -1377,10 +1380,15 @@ async function del(sheet,cod,mod){
 function openEntregas(codVenda){
   const itens=(DB.VendasItens||[]).filter(i=>String(i.CodVenda)===String(codVenda));
   const prods=DB.Produtos||[];
+  let totalVenda=0;
+  const venda=(DB.Vendas||[]).find(v=>String(v.Cod)===String(codVenda))||{};
   const rows=itens.map(i=>{
     const p=prods.find(x=>String(x.Cod)===String(i.CodProduto));
+    const vTot=Number(i.ValorTotal)||Number(i.Quantidade||0)*Number(i.ValorUnitario||0);
+    totalVenda+=vTot;
     return`<div class="entrega-row">
-      <span>${esc(p?prodLabel(p):'Produto '+i.CodProduto)} <span style="color:var(--text-muted)">(${i.Quantidade} un)</span></span>
+      <span style="flex:1;min-width:0">${esc(p?prodLabel(p):'Produto '+i.CodProduto)} <span style="color:var(--text-muted)">(${i.Quantidade} un)</span>
+        <span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px"><b style="color:var(--text-primary)">${fmt$(vTot)}</b> · ${i.Quantidade} × ${fmt$(i.ValorUnitario)}</span></span>
       <label class="toggle-ent">
         <input type="checkbox" ${i.Entregue==='Sim'?'checked':''} onchange="toggleEntrega(${codVenda},${i.CodProduto},this.checked)">
         <span>${i.Entregue==='Sim'?'Entregue':'Pendente'}</span>
@@ -1390,7 +1398,11 @@ function openEntregas(codVenda){
   ov.innerHTML=`<div class="modal">
     <div class="modal-hdr"><span class="modal-title">Entregas — Venda #${codVenda}</span>
       <button class="modal-close" onclick="this.closest('.overlay').remove()">×</button></div>
-    <div class="modal-body">${rows||'<p style="padding:20px;font-size:13px;color:var(--text-muted)">Sem itens.</p>'}</div>
+    <div class="modal-body">${rows||'<p style="padding:20px;font-size:13px;color:var(--text-muted)">Sem itens.</p>'}
+      ${rows?`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 4px 4px;font-size:14px;font-weight:600">
+        <span>Total da venda</span>
+        <span style="display:flex;align-items:center;gap:8px">${fmt$(totalVenda)} <span class="badge ${venda.StatusPagamento==='Pago'?'pago':'pendente'}">${venda.StatusPagamento==='Pago'?'Pago':'Pendente'}</span></span>
+      </div>`:''}</div>
     <div class="modal-footer"><button class="btn-cancel" onclick="this.closest('.overlay').remove()">Fechar</button></div>
   </div>`;
   ov.onclick=e=>{if(e.target===ov)ov.remove();};
@@ -1797,12 +1809,14 @@ function ajusteItemOpts(tipo){
   return(DB.MateriaPrima||[]).slice().sort((a,b)=>(a.Item||"").localeCompare(b.Item||"","pt")).map(m=>`<option value="${m.Cod}">${esc(m.Item)} (atual: ${Number(m.EstoqueAtual||0).toFixed(2)})</option>`).join('');
 }
 
-function openFormAjuste(){
+let ajusteVoltar='ajustes';
+function openFormAjuste(tipoPre,codPre,voltar){
+  ajusteVoltar=voltar||'ajustes';
   const c=document.getElementById('main-content');
   const motivoOpts=MOTIVOS_AJUSTE.map(m=>`<option value="${m}">${m}</option>`).join('');
   c.innerHTML=`<div style="display:flex;flex-direction:column;flex:1">
     <div class="mod-header">
-      <button class="btn-back" onclick="goMod('ajustes')"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
+      <button class="btn-back" onclick="goMod(ajusteVoltar)"><i class="ti ti-arrow-left" style="font-size:18px"></i></button>
       <div class="mod-title">Novo ajuste de estoque</div>
     </div>
     <div class="form-view"><div class="form-scroll">
@@ -1835,10 +1849,16 @@ function openFormAjuste(){
       <div class="fg"><label class="fl">Observação</label><input class="fi" id="aj-obs" placeholder="Detalhe opcional (ex: contagem de fim de mês, vidro quebrado no transporte...)"></div>
     </div>
     <div class="form-footer">
-      <button class="btn-cancel" onclick="goMod('ajustes')">Cancelar</button>
+      <button class="btn-cancel" onclick="goMod(ajusteVoltar)">Cancelar</button>
       <button class="btn-save" onclick="saveAjuste()"><i class="ti ti-check" style="font-size:14px"></i>Salvar ajuste</button>
     </div></div>
   </div>`;
+  if(tipoPre){
+    document.getElementById('aj-tipo').value=tipoPre;
+    onChangeAjusteTipo();
+    if(codPre) document.getElementById('aj-item').value=String(codPre);
+    const q=document.getElementById('aj-qtd'); if(q) q.focus();
+  }
 }
 
 function onChangeAjusteTipo(){
@@ -1861,7 +1881,7 @@ async function saveAjuste(){
     TipoItem:tipo,CodItem:codItem,TipoAjuste:mov,Quantidade:qtd,Motivo:motivo,Observacao:obs,Data:data
   }});
   if(r.error){toast('Erro: '+r.error,'e');return;}
-  toast('Ajuste registrado!');await loadAll();goMod('ajustes');
+  toast('Ajuste registrado!');await loadAll();goMod(ajusteVoltar);
 }
 
 async function delAjuste(cod){
